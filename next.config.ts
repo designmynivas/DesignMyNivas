@@ -42,16 +42,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.designmynivas.com" }],
-        destination: "https://designmynivas.com/:path*",
-        permanent: true,
-      },
-    ];
-  },
   async headers() {
     return [
       {
