@@ -14,6 +14,7 @@ import {
   PhoneCall
 } from "lucide-react";
 import { LocationItem } from "@/data/locations";
+import type { ProjectItem } from "@/data/projects";
 import { servicesData } from "@/data/services";
 import { useBookingModal } from "@/context/booking-modal-context";
 import { useCostEstimator } from "@/context/cost-estimator-context";
@@ -22,9 +23,10 @@ import { getLocationBreadcrumbs } from "@/lib/seo/breadcrumbs";
 
 interface LocationClientProps {
   location: LocationItem;
+  projects: ProjectItem[];
 }
 
-export default function LocationClient({ location }: LocationClientProps) {
+export default function LocationClient({ location, projects }: LocationClientProps) {
   const { openBookingModal } = useBookingModal();
   const { openCostEstimator } = useCostEstimator();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -254,7 +256,7 @@ export default function LocationClient({ location }: LocationClientProps) {
       </section>
 
       {/* 06. Projects in this location */}
-      {location.localProjects.length > 0 && (
+      {projects.length > 0 && (
         <section className="location-projects-section" aria-label="Completed Projects">
           <div className="container-wide">
             <div className="section-header">
@@ -266,7 +268,7 @@ export default function LocationClient({ location }: LocationClientProps) {
             </div>
 
             <div className="projects-grid">
-              {location.localProjects.map((p) => (
+              {projects.map((p) => (
                 <div key={p.slug} className="local-project-card">
                   <div className="project-image-box">
                     <Image

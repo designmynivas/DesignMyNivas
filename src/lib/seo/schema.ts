@@ -96,84 +96,32 @@ export function generateWebSiteSchema() {
 }
 
 /**
- * LocalBusiness Schema for city-specific landing pages
+ * Service Schema for city landing pages.
+ * Design My Nivas is one business serving several cities, so each city page
+ * describes the service offered there (provider = the one Organization) rather
+ * than a separate LocalBusiness with its own address, coordinates or hours.
  */
-export function generateLocalBusinessSchema(city: "hyderabad" | "warangal" | "karimnagar") {
-  const cityData = {
-    hyderabad: {
-      name: "Design My Nivas — Interior Designers Hyderabad",
-      city: "Hyderabad",
-      region: "Telangana",
-      postalCode: "500081",
-      lat: 17.4435,
-      lng: 78.3772,
-      description:
-        "Full home residential interiors, custom modular kitchens, and turnkey execution in Hyderabad (Gachibowli, Kokapet, Financial District, Tellapur, Jubilee Hills).",
-      url: `${SITE_URL}/interior-designers/hyderabad`,
-    },
-    warangal: {
-      name: "Design My Nivas — Interior Designers Warangal",
-      city: "Warangal",
-      region: "Telangana",
-      postalCode: "506001",
-      lat: 17.9689,
-      lng: 79.5941,
-      description:
-        "Turnkey residential interiors, bespoke modular kitchens, and woodwork execution for independent houses and duplexes in Warangal, Hanamkonda, and Kazipet.",
-      url: `${SITE_URL}/interior-designers/warangal`,
-    },
-    karimnagar: {
-      name: "Design My Nivas — Interior Designers Karimnagar",
-      city: "Karimnagar",
-      region: "Telangana",
-      postalCode: "505001",
-      lat: 18.4386,
-      lng: 79.1288,
-      description:
-        "Turnkey home interior design, modular kitchens, and tailored wardrobes for family residences in Karimnagar, Mukarampura, and Vavilalapalli.",
-      url: `${SITE_URL}/interior-designers/karimnagar`,
-    },
-  }[city];
-
+export function generateCityServiceSchema(location: {
+  slug: string;
+  city: string;
+  state: string;
+  metaDescription: string;
+}) {
+  const url = `${SITE_URL}/interior-designers/${location.slug}`;
   return {
     "@context": "https://schema.org",
-    "@type": "HomeAndConstructionBusiness",
-    "@id": `${cityData.url}#localbusiness`,
-    "name": cityData.name,
-    "url": cityData.url,
-    "telephone": siteConfig.phone,
-    "priceRange": "₹₹ - ₹₹₹₹",
-    "description": cityData.description,
-    "founder": {
-      "@type": "Person",
-      "name": "Benson Cheripelli",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    "name": `Residential Interior Design in ${location.city}`,
+    "serviceType": "Residential Interior Design and Turnkey Interior Execution",
+    "description": location.metaDescription,
+    "url": url,
+    "provider": { "@id": `${SITE_URL}/#organization` },
+    "areaServed": {
+      "@type": "City",
+      "name": location.city,
+      "containedInPlace": { "@type": "State", "name": location.state },
     },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": cityData.city,
-      "addressRegion": cityData.region,
-      "postalCode": cityData.postalCode,
-      "addressCountry": "IN",
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": cityData.lat,
-      "longitude": cityData.lng,
-    },
-    "areaServed": [
-      {
-        "@type": "City",
-        "name": cityData.city,
-      },
-    ],
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        "opens": "09:30",
-        "closes": "19:30",
-      },
-    ],
   };
 }
 

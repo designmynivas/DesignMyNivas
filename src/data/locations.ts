@@ -21,15 +21,6 @@ export interface LocationItem {
     title: string;
     description: string;
   }[];
-  localProjects: {
-    slug: string;
-    title: string;
-    type: string;
-    scope: string;
-    location: string;
-    image: string;
-    youtubeUrl?: string;
-  }[];
   localFaqs: {
     question: string;
     answer: string;
@@ -102,25 +93,6 @@ export const locationsData: Record<string, LocationItem> = {
         title: "100% Locked Bill of Quantities",
         description:
           "We provide a transparent, line-item BOQ with zero hidden charges and locked milestone payments prior to starting site work.",
-      },
-    ],
-    localProjects: [
-      {
-        slug: "nikhils-home",
-        title: "nikhils home",
-        type: "Complete Home Interiors",
-        scope: "Turnkey Interior Execution · Hyderabad",
-        location: "Hyderabad",
-        image: "https://img.youtube.com/vi/PVrYMT2cBHo/maxresdefault.jpg",
-        youtubeUrl: "https://www.youtube.com/shorts/PVrYMT2cBHo",
-      },
-      {
-        slug: "jubli-heaven-residencey",
-        title: "Jubli Heaven residencey",
-        type: "Turnkey Interior Execution",
-        scope: "Turnkey Residential Interior Execution · Hyderabad",
-        location: "Hyderabad",
-        image: "https://iaadakqgwoqvrhkinguy.supabase.co/storage/v1/object/public/project-images/projects/portrait_1790274819748_20igtm.jpeg",
       },
     ],
     localFaqs: [
@@ -198,16 +170,6 @@ export const locationsData: Record<string, LocationItem> = {
           "We use only calibrated Boiling Water Proof (BWP) marine plywood backed by a 10-year warranty, protecting your investment from moisture and termites.",
       },
     ],
-    localProjects: [
-      {
-        slug: "raju-sir-home",
-        title: "Raju sir home",
-        type: "Living Room Interiors",
-        scope: "Living Room & Lounge Interiors · Warangal",
-        location: "Warangal",
-        image: "https://iaadakqgwoqvrhkinguy.supabase.co/storage/v1/object/public/project-images/projects/portrait_1790274848727_w0tgde.jpeg",
-      },
-    ],
     localFaqs: [
       {
         question: "Do you have active interior projects in Warangal?",
@@ -281,17 +243,6 @@ export const locationsData: Record<string, LocationItem> = {
         title: "Direct Physical Site Management",
         description:
           "Experienced supervisors oversee on-site installation to ensure precise millimeter joins and smooth handover.",
-      },
-    ],
-    localProjects: [
-      {
-        slug: "nikhils-home",
-        title: "nikhils home",
-        type: "Complete Home Interiors",
-        scope: "Turnkey Interior Execution · Telangana",
-        location: "Hyderabad / Regional",
-        image: "https://img.youtube.com/vi/PVrYMT2cBHo/maxresdefault.jpg",
-        youtubeUrl: "https://www.youtube.com/shorts/PVrYMT2cBHo",
       },
     ],
     localFaqs: [

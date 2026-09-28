@@ -5,11 +5,14 @@ import LocationClient from "./location-client";
 import { generatePageMetadata } from "@/lib/seo/metadata";
 import JsonLd from "@/components/seo/json-ld";
 import {
-  generateLocalBusinessSchema,
+  generateCityServiceSchema,
   generateBreadcrumbSchema,
   generateFAQSchema,
 } from "@/lib/seo/schema";
 import { getLocationBreadcrumbs } from "@/lib/seo/breadcrumbs";
+import { getProjects } from "@/lib/supabase/queries";
+
+export const revalidate = 60;
 
 interface LocationPageProps {
   params: Promise<{
@@ -58,15 +61,19 @@ export default async function LocationPage({ params }: LocationPageProps) {
     notFound();
   }
 
-  const localBusinessSchema = generateLocalBusinessSchema(location.slug);
+  // Only real projects recorded in this city; the section is hidden when there are none
+  const cityProjects = (await getProjects()).filter((project) =>
+    project.location.toLowerCase().includes(location.city.toLowerCase())
+  );
+  const cityServiceSchema = generateCityServiceSchema(location);
   const breadcrumbs = getLocationBreadcrumbs(location.city, location.slug);
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
   const faqSchema = generateFAQSchema(location.localFaqs);
 
   return (
     <>
-      <JsonLd data={[localBusinessSchema, breadcrumbSchema, faqSchema]} />
-      <LocationClient location={location} />
+      <JsonLd data={[cityServiceSchema, breadcrumbSchema, faqSchema]} />
+      <LocationClient location={location} projects={cityProjects} />
     </>
   );
 }

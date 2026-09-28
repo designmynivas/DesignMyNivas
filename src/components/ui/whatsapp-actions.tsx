@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { getWhatsAppUrl } from "@/lib/config/site";
 import { useBookingModal } from "@/context/booking-modal-context";
 
@@ -8,8 +9,16 @@ export default function WhatsAppActions() {
   const [showStickyBar, setShowStickyBar] = useState(false);
   const { openBookingModal } = useBookingModal();
 
+  const pathname = usePathname();
+
+  // Mention the city only when the visitor is on that city's page or guide
+  const cityMatch = pathname?.match(/^\/interior-designers\/(hyderabad|warangal|karimnagar)(\/|$)/);
+  const city = cityMatch ? cityMatch[1].charAt(0).toUpperCase() + cityMatch[1].slice(1) : null;
+
   const whatsappUrl = getWhatsAppUrl(
-    "Hello Design My Nivas, I would like to enquire about residential interior design for my home."
+    city
+      ? `Hello Design My Nivas, I would like to discuss my home interior project in ${city}.`
+      : "Hello Design My Nivas, I would like to enquire about residential interior design for my home."
   );
 
   /* Show mobile sticky bar only after scrolling past the hero section (~100vh) */
