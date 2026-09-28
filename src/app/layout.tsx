@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { siteConfig } from "@/lib/config/site";
 import StyledJsxRegistry from "@/lib/styled-jsx-registry";
 import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/seo/schema";
@@ -79,6 +80,7 @@ export default function RootLayout({
       </head>
       <body>
         <StyledJsxRegistry>{children}</StyledJsxRegistry>
+        <Analytics />
       </body>
     </html>
   );
