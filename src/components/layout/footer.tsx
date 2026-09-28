@@ -122,9 +122,6 @@ export default function SiteFooter() {
             <p className="footer-copy">
               &copy; {currentYear} Design My Nivas. Founded by Benson Cheripelli. All rights reserved.
             </p>
-            <div className="footer-tagline-text">
-              {siteConfig.tagline}
-            </div>
             <p className="footer-credit">
               Designed &amp; developed by{" "}
               <a
@@ -133,6 +130,13 @@ export default function SiteFooter() {
                 rel="noopener"
                 className="footer-credit-link"
               >
+                <Image
+                  src="/logo/Dorabeen logo.png"
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="footer-credit-logo"
+                />
                 Dorabeen
               </a>
             </p>
@@ -266,23 +270,25 @@ export default function SiteFooter() {
         }
 
         .footer-credit-link {
-          color: var(--foreground);
-          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          vertical-align: middle;
+          /* Dorabeen brand red, darkened slightly from #FF0000 to pass WCAG AA contrast on white */
+          color: #e60000;
+          font-weight: 700;
           text-decoration: none;
-          transition: color var(--duration-fast);
+          transition: opacity var(--duration-fast);
         }
 
         .footer-credit-link:hover {
-          color: var(--brand-blue);
+          opacity: 0.8;
         }
 
-        .footer-tagline-text {
-          font-family: var(--font-body);
-          font-size: var(--text-caption);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--brand-blue);
-          font-weight: 600;
+        .footer-credit-link :global(.footer-credit-logo) {
+          width: 16px;
+          height: 16px;
+          flex-shrink: 0;
         }
 
         @media (max-width: 960px) {
