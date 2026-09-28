@@ -1,0 +1,315 @@
+/* 100% Height & 100% Width Canvas with Left-Bottom Anchor */
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end; /* Strict bottom alignment */
+  justify-content: flex-start;
+  overflow: hidden;
+  background-color: #F7F5F0;
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+}
+
+/* Scrim focused strictly on bottom-left for high text contrast without washing out room render */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(
+      ellipse 85% 75% at 0% 100%,
+      rgba(247, 245, 240, 0.96) 0%,
+      rgba(247, 245, 240, 0.90) 34%,
+      rgba(247, 245, 240, 0.65) 54%,
+      rgba(247, 245, 240, 0.20) 74%,
+      transparent 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(247, 245, 240, 0.92) 0%,
+      rgba(247, 245, 240, 0.40) 26%,
+      transparent 55%
+    );
+  pointer-events: none;
+}
+
+/* Content Wrapper anchored to bottom-left */
+.heroContentWrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: clamp(1.5rem, 4vw, 3.5rem);
+  padding-right: clamp(1.5rem, 4vw, 3.5rem);
+  padding-bottom: clamp(2.75rem, 5.5vh, 4.75rem);
+}
+
+.heroContent {
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* High-converting Social Proof Pill Badge */
+.heroSocialProofWrap {
+  margin-bottom: 0.875rem;
+  display: inline-flex;
+}
+
+/* Clean Transparent Location Bar — Text matches heading, dynamic city in Primary Blue */
+.heroLocationBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  margin-bottom: 0.875rem;
+  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.locationServiceTag {
+  font-family: var(--font-display);
+  font-size: clamp(0.9375rem, 1.4vw, 1.1875rem);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--foreground);
+  line-height: 1.25;
+}
+
+.locationChangingWord {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.9375rem, 1.4vw, 1.1875rem);
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: #29ABE2 !important;
+  min-width: 105px;
+  line-height: 1.25;
+}
+
+.locPinIcon {
+  color: #29ABE2 !important;
+  flex-shrink: 0;
+}
+
+.rotatingLocationText {
+  color: #29ABE2 !important;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+/* Architectural Headline */
+.heroHeadline {
+  font-size: clamp(2.35rem, 4.3vw, 3.85rem);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+  margin-bottom: 1.25rem;
+}
+
+/* Supporting Copy */
+.heroSupporting {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--foreground-muted);
+  max-width: 590px;
+  margin-bottom: 1.75rem;
+}
+
+/* Rectangular Action Buttons */
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+/* Primary Action Button with Vibrant Blue Glow */
+.heroBtnGlow {
+  height: 48px;
+  padding: 0 1.85rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, #3BB6EA 0%, #1793C9 100%) !important;
+  border: 1px solid #29ABE2 !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px -4px rgba(41, 171, 226, 0.52), 0 4px 10px -2px rgba(41, 171, 226, 0.32), inset 0 1px 1px 0 rgba(255, 255, 255, 0.45) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.heroBtnGlow:hover {
+  background: linear-gradient(180deg, #48BEF0 0%, #1388BC 100%) !important;
+  border-color: #1FA0D6 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -4px rgba(41, 171, 226, 0.7), 0 6px 16px -2px rgba(41, 171, 226, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.heroBtnGlow:active {
+  transform: scale(0.98);
+  box-shadow: 0 6px 18px -2px rgba(41, 171, 226, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Arrow: Points right -> Rotates to top-right on hover */
+.btnArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heroBtnGlow:hover .btnArrow {
+  transform: translate(2px, -2px) rotate(-45deg);
+}
+
+/* Clean Stroke Secondary Button — Matching 12px Rounded Rectangle Shape */
+.heroBtnSecondary {
+  height: 48px;
+  padding: 0 1.65rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background-color: #FFFFFF;
+  border: 1.5px solid #D8D5CF;
+  border-radius: 12px;
+  color: var(--foreground);
+  box-shadow: 0 1px 3px rgba(24, 24, 24, 0.04);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.heroBtnSecondary:hover {
+  background-color: rgba(41, 171, 226, 0.04);
+  border-color: #29ABE2;
+  color: #29ABE2;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(41, 171, 226, 0.2);
+}
+
+.secondaryArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.heroBtnSecondary:hover .secondaryArrow {
+  transform: translateX(3px);
+}
+
+/* Mobile Adaptations */
+@media (max-width: 960px) {
+  .heroSection {
+    min-height: 100svh;
+    height: 100svh;
+    padding-top: 4.5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .heroContentWrapper {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .heroSocialProofWrap {
+    margin-bottom: 0.5rem;
+  }
+
+  .heroLocationBar {
+    margin-bottom: 0.5rem;
+    padding: 0;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    gap: 0.25rem 0.4rem;
+  }
+
+  .locationServiceTag {
+    font-size: 0.8125rem;
+    color: var(--foreground);
+    text-transform: none;
+  }
+
+  .locationChangingWord {
+    font-size: 0.8125rem;
+    color: #29ABE2 !important;
+    gap: 0.25rem;
+  }
+
+  .heroHeadline {
+    font-size: clamp(1.85rem, 6.8vw, 2.45rem);
+    line-height: 1.12;
+    margin-bottom: 0.625rem;
+  }
+
+  .heroSupporting {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1.125rem;
+    max-width: 520px;
+  }
+
+  .heroActions {
+    flex-direction: row;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .heroBtnGlow,
+  .heroBtnSecondary {
+    flex: 1 1 0px;
+    min-width: 0;
+    justify-content: center;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+    height: 44px;
+  }
+}
+
+@media (max-width: 400px) {
+  .heroHeadline {
+    font-size: 1.75rem;
+  }
+
+  .heroSupporting {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .heroBtnGlow,
+  .heroBtnSecondary {
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
+    height: 42px;
+  }
+}
