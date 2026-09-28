@@ -30,7 +30,6 @@ export function getBlogBreadcrumbs(blogTitle: string, blogSlug: string): Breadcr
 export function getLocationBreadcrumbs(cityName: string, citySlug: string): BreadcrumbItem[] {
   return [
     { name: "Home", url: "/" },
-    { name: "Locations", url: "/services" },
     { name: `Interior Designers in ${cityName}`, url: `/interior-designers/${citySlug}` },
   ];
 }

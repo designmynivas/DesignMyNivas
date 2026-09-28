@@ -48,7 +48,7 @@ export default function LocationClient({ location, projects }: LocationClientPro
             <div className="hero-text-col">
               <div className="location-badge">
                 <MapPin size={14} className="badge-pin-icon" />
-                <span>{location.city}, {location.state} · Turnkey Interior Studio</span>
+                <span>Serving {location.city}, {location.state} · Turnkey Interiors</span>
               </div>
 
               <h1 className="location-headline">{location.headline}</h1>
@@ -109,7 +109,7 @@ export default function LocationClient({ location, projects }: LocationClientPro
               <div className="hero-image-frame">
                 <Image
                   src={location.heroImage}
-                  alt={`${location.city} Residential Interiors by Design My Nivas`}
+                  alt="Residential interior designed by Design My Nivas"
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -117,7 +117,7 @@ export default function LocationClient({ location, projects }: LocationClientPro
                   style={{ objectFit: "cover" }}
                 />
                 <div className="image-caption-pill">
-                  <span>Active Residential Projects in {location.city}</span>
+                  <span>Serving homeowners in {location.city}</span>
                 </div>
               </div>
             </div>
