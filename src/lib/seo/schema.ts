@@ -34,12 +34,7 @@ export function generateOrganizationSchema() {
     },
     "telephone": siteConfig.phone,
     "email": siteConfig.email,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Hyderabad",
-      "addressRegion": "Telangana",
-      "addressCountry": "IN",
-    },
+    // Service-area business: no public customer-facing address, so only the cities served are listed
     "areaServed": [
       {
         "@type": "City",
