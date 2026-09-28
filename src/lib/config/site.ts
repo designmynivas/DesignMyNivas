@@ -21,7 +21,7 @@ export const siteConfig: SiteConfig = {
     "Design My Nivas creates residential interiors, modular kitchens, bedrooms and turnkey home interiors across Hyderabad, Warangal and Karimnagar.",
   url: getCanonicalSiteUrl(),
   primaryLocations: ["Hyderabad", "Warangal", "Karimnagar"],
-  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 98765 43210",
+  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 78935 25257",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917893525257",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@designmynivas.com",
 };
