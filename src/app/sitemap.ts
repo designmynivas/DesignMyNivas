@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog pages (published blogs only from Supabase)
   let blogRoutes: MetadataRoute.Sitemap = [];
   try {
-    const blogs = await getBlogs(true);
+    const blogs = await getBlogs();
     blogRoutes = blogs.map((blog) => ({
       url: `${siteUrl}/blogs/${blog.slug}`,
       lastModified: new Date(blog.updated_at || blog.created_at),
