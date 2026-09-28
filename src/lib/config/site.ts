@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
   url: getCanonicalSiteUrl(),
   primaryLocations: ["Hyderabad", "Warangal", "Karimnagar"],
   phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 98765 43210",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919876543210",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917893525257",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@designmynivas.com",
 };
 

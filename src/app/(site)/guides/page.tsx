@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, Clock, ChevronRight, Compass, ShieldCheck } from "lucide-react";
+import { Clock, ChevronRight, Compass, ShieldCheck } from "lucide-react";
 import { allGuides, getGuideCategories } from "@/data/guides";
 import { generatePageMetadata } from "@/lib/seo/metadata";
 import { getGuidesHubBreadcrumbs } from "@/lib/seo/breadcrumbs";
