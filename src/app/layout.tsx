@@ -17,19 +17,19 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Design My Nivas | Interior Designers in Hyderabad, Warangal & Karimnagar",
+    default: "Interior Designers Hyderabad & Telangana | Design My Nivas",
     template: "%s | Design My Nivas",
   },
   description:
-    "Design My Nivas creates residential interiors, modular kitchens, bedrooms and turnkey home interiors across Hyderabad, Warangal and Karimnagar.",
+    "Turnkey home interiors, modular kitchens and bedrooms in Hyderabad, Warangal and Karimnagar by Design My Nivas. Itemized pricing, on-time handover.",
   metadataBase: new URL(siteConfig.url),
   alternates: {
     canonical: siteConfig.url,
   },
   openGraph: {
-    title: "Design My Nivas | Interior Designers in Hyderabad, Warangal & Karimnagar",
+    title: "Interior Designers Hyderabad & Telangana | Design My Nivas",
     description:
-      "Design My Nivas creates residential interiors, modular kitchens, bedrooms and turnkey home interiors across Hyderabad, Warangal and Karimnagar.",
+      "Turnkey home interiors, modular kitchens and bedrooms in Hyderabad, Warangal and Karimnagar by Design My Nivas. Itemized pricing, on-time handover.",
     url: siteConfig.url,
     siteName: "Design My Nivas",
     locale: "en_IN",
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Design My Nivas | Interior Designers in Hyderabad, Warangal & Karimnagar",
+    title: "Interior Designers Hyderabad & Telangana | Design My Nivas",
     description:
-      "Design My Nivas creates residential interiors, modular kitchens, bedrooms and turnkey home interiors across Hyderabad, Warangal and Karimnagar.",
+      "Turnkey home interiors, modular kitchens and bedrooms in Hyderabad, Warangal and Karimnagar by Design My Nivas. Itemized pricing, on-time handover.",
     images: [`${siteConfig.url}/brand/og-default.jpg`],
   },
   robots: {

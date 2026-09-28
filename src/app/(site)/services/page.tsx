@@ -9,9 +9,9 @@ import { servicesData } from "@/data/services";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://designmynivas.com";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Interior Design Services in Hyderabad, Warangal & Karimnagar | Design My Nivas",
+  title: "Interior Design Services in Telangana | Design My Nivas",
   description:
-    "Explore 8 core interior design services by Design My Nivas: complete home interiors, modular kitchens, living rooms, bedrooms, wardrobes, custom furniture, false ceilings, and turnkey execution across Telangana.",
+    "Complete home interiors, modular kitchens, living rooms, bedrooms, wardrobes, custom furniture and false ceilings across Hyderabad, Warangal and Karimnagar.",
   path: "/services",
   keywords: [
     "interior design services Hyderabad",

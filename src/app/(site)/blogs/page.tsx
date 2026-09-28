@@ -14,7 +14,7 @@ export const revalidate = 0;
 export const metadata: Metadata = generatePageMetadata({
   title: "Interior Design Journal & Guides | Design My Nivas",
   description:
-    "Explore expert articles on modern interior design, modular kitchen finishes, architectural lighting, and turnkey residential execution across Hyderabad, Warangal, and Karimnagar.",
+    "Expert articles on interior design, modular kitchen finishes, lighting and turnkey home execution in Hyderabad, Warangal and Karimnagar.",
   path: "/blogs",
   keywords: [
     "interior design blog Hyderabad",

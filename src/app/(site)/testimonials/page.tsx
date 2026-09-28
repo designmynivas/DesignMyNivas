@@ -12,7 +12,7 @@ export const revalidate = 0;
 export const metadata: Metadata = generatePageMetadata({
   title: "Client Testimonials & Experiences | Design My Nivas",
   description:
-    "Hear directly from homeowners who trusted Design My Nivas for their residential interiors across Hyderabad, Warangal, and Karimnagar. Real turnkey execution stories and video reviews.",
+    "Video reviews and stories from homeowners who chose Design My Nivas for turnkey interiors in Hyderabad, Warangal and Karimnagar.",
   path: "/testimonials",
   keywords: [
     "Design My Nivas reviews",

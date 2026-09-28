@@ -122,6 +122,9 @@ export default function SiteFooter() {
             <p className="footer-copy">
               &copy; {currentYear} Design My Nivas. Founded by Benson Cheripelli. All rights reserved.
             </p>
+            <div className="footer-tagline-text">
+              {siteConfig.tagline}
+            </div>
             <p className="footer-credit">
               Designed &amp; developed by{" "}
               <a
@@ -133,9 +136,6 @@ export default function SiteFooter() {
                 Dorabeen
               </a>
             </p>
-            <div className="footer-tagline-text">
-              {siteConfig.tagline}
-            </div>
           </div>
         </div>
       </div>

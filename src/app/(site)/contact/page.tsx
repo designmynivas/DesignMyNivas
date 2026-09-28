@@ -9,9 +9,9 @@ import { siteConfig } from "@/lib/config/site";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://designmynivas.com";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Contact Design My Nivas | Book a Residential Interior Consultation",
+  title: "Contact Us | Book a Consultation | Design My Nivas",
   description:
-    "Get in touch with Benson Cheripelli and the Design My Nivas team. Direct phone, WhatsApp, email, and consultation booking across Hyderabad, Warangal, and Karimnagar.",
+    "Call, WhatsApp or email Benson Cheripelli and the Design My Nivas team, or book an interior consultation in Hyderabad, Warangal and Karimnagar.",
   path: "/contact",
   keywords: [
     "contact interior designer Hyderabad",

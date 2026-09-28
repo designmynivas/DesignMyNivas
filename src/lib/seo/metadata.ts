@@ -13,15 +13,37 @@ export interface PageMetadataProps {
 
 const DEFAULT_OG_IMAGE = "/brand/og-default.jpg";
 
+// Search engines truncate titles past ~60 chars and descriptions past ~160 chars
+const MAX_TITLE_LENGTH = 60;
+const MAX_DESCRIPTION_LENGTH = 160;
+const BRAND_SUFFIX = /\s*\|\s*Design My Nivas$/i;
+
+function fitTitle(title: string): string {
+  // Add the brand when it fits; otherwise drop it (the brand is still carried by og:site_name)
+  const base = title.replace(BRAND_SUFFIX, "");
+  const branded = `${base} | Design My Nivas`;
+  if (/design my nivas/i.test(base)) return base;
+  return branded.length <= MAX_TITLE_LENGTH ? branded : base;
+}
+
+function fitDescription(description: string): string {
+  if (description.length <= MAX_DESCRIPTION_LENGTH) return description;
+  const cut = description.slice(0, MAX_DESCRIPTION_LENGTH - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.\-–—]+$/, "")}…`;
+}
+
 export function generatePageMetadata({
-  title,
-  description,
+  title: rawTitle,
+  description: rawDescription,
   path = "",
   image = DEFAULT_OG_IMAGE,
   keywords,
   noindex = false,
   type = "website",
 }: PageMetadataProps): Metadata {
+  const title = fitTitle(rawTitle);
+  const description = fitDescription(rawDescription);
   const siteUrl = getCanonicalSiteUrl();
   // Clean path to prevent trailing slash inconsistencies
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
@@ -34,7 +56,9 @@ export function generatePageMetadata({
       "residential interior design, turnkey interior execution, interior designers Hyderabad, modular kitchens, bedroom interiors, Design My Nivas, Warangal, Karimnagar";
 
   return {
-    title,
+    // Titles that already name the brand bypass the layout's "%s | Design My Nivas" template
+    // Always absolute: the layout's "%s | Design My Nivas" template would re-add the brand or overflow the limit
+    title: { absolute: title },
     description,
     keywords: formattedKeywords,
     alternates: {

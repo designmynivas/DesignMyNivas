@@ -14,7 +14,7 @@ export const revalidate = 0;
 export const metadata: Metadata = generatePageMetadata({
   title: "Homes We've Designed | Design My Nivas Portfolio",
   description:
-    "Explore residential interiors designed and executed by Design My Nivas across Hyderabad, Warangal and Karimnagar. Complete flats, luxury villas, and penthouses with 100% itemized pricing.",
+    "Residential interiors designed and executed by Design My Nivas in Hyderabad, Warangal and Karimnagar: flats, villas and penthouses with itemized pricing.",
   path: "/projects",
   keywords: [
     "interior design portfolio Hyderabad",

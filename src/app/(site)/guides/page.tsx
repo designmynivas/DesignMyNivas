@@ -12,7 +12,7 @@ import styles from "./guides-hub.module.css";
 export const metadata: Metadata = generatePageMetadata({
   title: "Homeowner Guides & Cost Planning Library",
   description:
-    "Explore 50 comprehensive interior design, cost budgeting, room planning, and turnkey execution guides by Benson Cheripelli and the Design My Nivas engineering team.",
+    "50 homeowner guides on interior design, cost budgeting, room planning and turnkey execution by Benson Cheripelli and the Design My Nivas team.",
   path: "/guides",
   image: "/Images/main-hero.webp",
   keywords: [

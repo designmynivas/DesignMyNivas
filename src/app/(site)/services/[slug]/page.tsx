@@ -37,7 +37,7 @@ export async function generateMetadata({
   }
 
   const cluster = SERVICE_KEYWORD_CLUSTERS[slug];
-  const title = `${service.name} Designers in Hyderabad, Warangal & Karimnagar | Design My Nivas`;
+  const title = `${service.name} in Hyderabad`;
   const description = `${service.shortDescription} Design My Nivas offers bespoke ${service.name.toLowerCase()} with 100% itemized BOQ, IS:710 BWP marine woodwork, and turnkey site execution in Telangana.`;
 
   return generatePageMetadata({

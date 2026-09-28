@@ -8,9 +8,9 @@ import { getStandardBreadcrumbs } from "@/lib/seo/breadcrumbs";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://designmynivas.com";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "About Design My Nivas | Benson Cheripelli & Studio Philosophy",
+  title: "About Us | Benson Cheripelli | Design My Nivas",
   description:
-    "Learn about Design My Nivas, founded by Benson Cheripelli. 5+ years of practice, 70+ completed homes across Hyderabad, Warangal, and Karimnagar with 100% itemized pricing and turnkey execution.",
+    "Design My Nivas, founded by Benson Cheripelli: 5+ years and 70+ homes completed in Hyderabad, Warangal and Karimnagar. Itemized pricing, turnkey execution.",
   path: "/about",
   keywords: [
     "Benson Cheripelli",

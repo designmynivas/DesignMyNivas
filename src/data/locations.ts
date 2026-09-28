@@ -44,7 +44,7 @@ export const locationsData: Record<string, LocationItem> = {
     headline: "Residential Interior Designers in Hyderabad",
     subheadline:
       "End-to-end turnkey interior design and precision woodwork execution for high-rise apartments, gated communities, and luxury villas across Hyderabad.",
-    metaTitle: "Interior Designers in Hyderabad | Design My Nivas — Turnkey Execution",
+    metaTitle: "Interior Designers in Hyderabad | Design My Nivas",
     metaDescription:
       "Looking for residential interior designers in Hyderabad? Design My Nivas delivers complete home interiors, modular kitchens, and turnkey execution across Gachibowli, Kokapet, Tellapur, and Financial District.",
     heroImage: "/Images/services/complete-home-interiors.webp",
@@ -149,7 +149,7 @@ export const locationsData: Record<string, LocationItem> = {
     headline: "Residential Interior Designers in Warangal & Hanamkonda",
     subheadline:
       "Turnkey home interiors, bespoke modular kitchens, and custom woodwork execution for independent houses, duplexes, and villas across Warangal, Hanamkonda, and Kazipet.",
-    metaTitle: "Interior Designers in Warangal | Design My Nivas — Turnkey Homes",
+    metaTitle: "Interior Designers in Warangal | Design My Nivas",
     metaDescription:
       "Premier residential interior designers in Warangal, Hanamkonda, and Kazipet. Design My Nivas delivers custom modular kitchens, false ceilings, and turnkey home interiors with locked pricing.",
     heroImage: "/Images/services/living-room-interiors.webp",
@@ -234,7 +234,7 @@ export const locationsData: Record<string, LocationItem> = {
     headline: "Residential Interior Designers in Karimnagar",
     subheadline:
       "Turnkey home interiors, custom modular kitchens, and premium wardrobe execution for independent houses and family apartments in Karimnagar.",
-    metaTitle: "Interior Designers in Karimnagar | Design My Nivas — Turnkey Execution",
+    metaTitle: "Interior Designers in Karimnagar | Design My Nivas",
     metaDescription:
       "Expert residential interior designers in Karimnagar. Design My Nivas offers turnkey interiors, modular kitchens, and woodwork execution with 100% itemized pricing.",
     heroImage: "/Images/services/wardrobes-storage.webp",

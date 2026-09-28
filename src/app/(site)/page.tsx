@@ -21,9 +21,9 @@ const CostCalculatorSection = dynamic(() => import("@/components/home/cost-calcu
 export const revalidate = 60;
 
 export const metadata = generatePageMetadata({
-  title: "Interior Designers in Hyderabad, Warangal & Karimnagar | Design My Nivas",
+  title: "Interior Designers Hyderabad & Telangana | Design My Nivas",
   description:
-    "Design My Nivas delivers turnkey residential interior design, custom modular kitchens, and woodwork execution for flats and villas across Hyderabad, Warangal, and Karimnagar. Founded by Benson Cheripelli with 100% itemized pricing.",
+    "Turnkey home interiors, modular kitchens and woodwork for flats and villas in Hyderabad, Warangal and Karimnagar. 100% itemized pricing, on-time handover.",
   path: "/",
   keywords: [
     "interior designers Hyderabad",
