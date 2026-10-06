@@ -23,16 +23,18 @@ export default function HomeBlogs({ initialBlogs = [] }: HomeBlogsProps) {
   useEffect(() => {
     let isMounted = true;
     const fetchLatest = () => {
-      import("@/lib/supabase/queries").then(({ getBlogs }) => getBlogs()).then((data) => {
-        if (isMounted && data) {
-          setBlogs(data.slice(0, LIMIT));
-        }
-      });
+      import("@/lib/supabase/queries")
+        .then(({ getBlogs }) => getBlogs(false, true))
+        .then((data) => {
+          if (isMounted) setBlogs(data.slice(0, LIMIT));
+        })
+        .catch(() => {
+          // Network hiccup: keep what's on screen
+        });
     };
 
-    if (!initialBlogs || initialBlogs.length === 0) {
-      fetchLatest();
-    }
+    // The page HTML can be up to a minute old; pick up any edit made since then
+    fetchLatest();
 
     const handleUpdate = () => fetchLatest();
     window.addEventListener("dmn-blogs-updated", handleUpdate);

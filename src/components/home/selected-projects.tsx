@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
-import { projectsData, ProjectItem } from "@/data/projects";
+import type { ProjectItem } from "@/data/projects";
 import Slider from "@/components/ui/slider";
 import BookButton from "@/components/ui/book-button";
 import YouTubePlayerModal from "@/components/ui/youtube-player-modal";
@@ -67,32 +67,31 @@ function ProjectTile({ project, onPlay }: { project: ProjectItem; onPlay: (p: Pr
 }
 
 export default function SelectedProjects({ initialProjects }: SelectedProjectsProps = {}) {
-  const [projectsList, setProjectsList] = useState<ProjectItem[]>(
-    initialProjects && initialProjects.length > 0 ? initialProjects.slice(0, LIMIT) : projectsData.slice(0, LIMIT)
-  );
+  const [projectsList, setProjectsList] = useState<ProjectItem[]>((initialProjects ?? []).slice(0, LIMIT));
   const [prevInitial, setPrevInitial] = useState(initialProjects);
   const [playing, setPlaying] = useState<ProjectItem | null>(null);
 
   if (initialProjects !== prevInitial) {
     setPrevInitial(initialProjects);
-    if (initialProjects && initialProjects.length > 0) {
-      setProjectsList(initialProjects.slice(0, LIMIT));
-    }
+    setProjectsList((initialProjects ?? []).slice(0, LIMIT));
   }
 
   useEffect(() => {
     let isMounted = true;
     const fetchLatest = () => {
-      import("@/lib/supabase/queries").then(({ getProjects }) => getProjects()).then((items) => {
-        if (isMounted && items && items.length > 0) {
-          setProjectsList(items.slice(0, LIMIT));
-        }
-      });
+      import("@/lib/supabase/queries")
+        .then(({ getProjects }) => getProjects(true))
+        .then((items) => {
+          // An empty list is a real answer (everything was deleted), not a reason to keep stale cards
+          if (isMounted) setProjectsList(items.slice(0, LIMIT));
+        })
+        .catch(() => {
+          // Network hiccup: keep what's on screen
+        });
     };
 
-    if (!initialProjects || initialProjects.length === 0) {
-      fetchLatest();
-    }
+    // The page HTML can be up to a minute old; pick up any edit made since then
+    fetchLatest();
 
     const handleUpdate = () => fetchLatest();
     window.addEventListener("dmn-projects-updated", handleUpdate);
@@ -104,6 +103,8 @@ export default function SelectedProjects({ initialProjects }: SelectedProjectsPr
       window.removeEventListener("focus", handleUpdate);
     };
   }, [initialProjects]);
+
+  if (projectsList.length === 0) return null;
 
   return (
     <section className="block" id="projects" aria-labelledby="projects-title">

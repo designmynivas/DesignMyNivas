@@ -4,7 +4,7 @@ import { Clock, Calendar, CheckCircle2, MapPin, ChevronRight, MessageSquare } fr
 import { GuideItem } from "@/data/guides/types";
 import { getRelatedGuidesForSlug } from "@/data/guides";
 import { servicesData } from "@/data/services";
-import { projectsData } from "@/data/projects";
+import type { ProjectItem } from "@/data/projects";
 import { getGuideBreadcrumbs, getLocalGuideBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import Breadcrumbs from "@/components/seo/breadcrumbs";
 import JsonLd from "@/components/seo/json-ld";
@@ -15,9 +15,11 @@ import styles from "./guide.module.css";
 
 interface GuideDetailViewProps {
   guide: GuideItem;
+  /** Live projects from Supabase; only ones still published are linked */
+  projects: ProjectItem[];
 }
 
-export default function GuideDetailView({ guide }: GuideDetailViewProps) {
+export default function GuideDetailView({ guide, projects }: GuideDetailViewProps) {
   const breadcrumbs = guide.isLocalGuide && guide.city
     ? getLocalGuideBreadcrumbs(
         guide.city === "hyderabad" ? "Hyderabad" : guide.city === "warangal" ? "Warangal" : "Karimnagar",
@@ -27,7 +29,7 @@ export default function GuideDetailView({ guide }: GuideDetailViewProps) {
 
   const relatedGuides = getRelatedGuidesForSlug(guide.slug, 3);
   const relatedServices = servicesData.filter((s) => guide.relatedServices.includes(s.slug));
-  const relatedProjects = projectsData.filter((p) => guide.relatedProjects.includes(p.slug));
+  const relatedProjects = projects.filter((p) => guide.relatedProjects.includes(p.slug));
 
   const whatsappMessage = `Hello Benson, I was reading your guide on "${guide.title}" and would like to discuss interior design for my home.`;
   const whatsappUrl = getWhatsAppUrl(whatsappMessage);

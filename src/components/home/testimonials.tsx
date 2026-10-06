@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import { Testimonial } from "@/types/testimonial";
-import { initialTestimonials } from "@/data/testimonials";
 import Slider from "@/components/ui/slider";
 import BookButton from "@/components/ui/book-button";
 import YouTubePlayerModal from "@/components/ui/youtube-player-modal";
@@ -54,33 +53,31 @@ function VideoCard({ item, onPlay }: { item: Testimonial; onPlay: (t: Testimonia
 }
 
 export default function Testimonials({ initialTestimonials: propInitial }: TestimonialsProps = {}) {
-  const [items, setItems] = useState<Testimonial[]>(() => {
-    const fromProps = propInitial ? videosOnly(propInitial) : [];
-    return fromProps.length > 0 ? fromProps : videosOnly(initialTestimonials);
-  });
+  const [items, setItems] = useState<Testimonial[]>(() => videosOnly(propInitial ?? []));
   const [prevPropInitial, setPrevPropInitial] = useState(propInitial);
   const [playing, setPlaying] = useState<Testimonial | null>(null);
 
   if (propInitial !== prevPropInitial) {
     setPrevPropInitial(propInitial);
-    const fromProps = propInitial ? videosOnly(propInitial) : [];
-    if (fromProps.length > 0) setItems(fromProps);
+    setItems(videosOnly(propInitial ?? []));
   }
 
   useEffect(() => {
     let isMounted = true;
     const fetchLatest = () => {
-      import("@/lib/supabase/queries").then(({ getTestimonials }) => getTestimonials()).then((res) => {
-        if (isMounted && res) {
-          const videoReviews = videosOnly(res);
-          if (videoReviews.length > 0) setItems(videoReviews);
-        }
-      });
+      import("@/lib/supabase/queries")
+        .then(({ getTestimonials }) => getTestimonials(true))
+        .then((res) => {
+          // An empty list is a real answer (everything was deleted), not a reason to keep stale cards
+          if (isMounted) setItems(videosOnly(res));
+        })
+        .catch(() => {
+          // Network hiccup: keep what's on screen
+        });
     };
 
-    if (!propInitial || propInitial.length === 0) {
-      fetchLatest();
-    }
+    // The page HTML can be up to a minute old; pick up any edit made since then
+    fetchLatest();
 
     const handleUpdate = () => fetchLatest();
     window.addEventListener("dmn-testimonials-updated", handleUpdate);

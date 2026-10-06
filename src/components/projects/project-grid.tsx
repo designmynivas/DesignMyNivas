@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { projectsData, ProjectItem } from "@/data/projects";
+import type { ProjectItem } from "@/data/projects";
 import ProjectCard from "@/components/projects/project-card";
 
 interface ProjectGridProps {
@@ -13,7 +13,7 @@ interface ProjectGridProps {
 const filterOptions = ["All", "Full Home", "Living", "Bedroom"];
 
 export default function ProjectGrid({
-  initialProjects = projectsData,
+  initialProjects = [],
   showFilters = true,
   limit,
 }: ProjectGridProps) {
@@ -27,6 +27,14 @@ export default function ProjectGrid({
   const displayedProjects = limit
     ? filteredProjects.slice(0, limit)
     : filteredProjects;
+
+  if (initialProjects.length === 0) {
+    return (
+      <p style={{ textAlign: "center", padding: "2rem 0", color: "var(--foreground-muted)" }}>
+        New projects are being added. Check back soon.
+      </p>
+    );
+  }
 
   return (
     <div className="project-grid-wrapper">

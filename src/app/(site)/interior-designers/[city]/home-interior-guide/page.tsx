@@ -2,6 +2,10 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocalGuideByCity, localGuides } from "@/data/guides";
 import GuideDetailView from "@/components/guides/guide-detail-view";
+import { getProjects } from "@/lib/supabase/queries";
+
+// Related-project links follow the live project list
+export const revalidate = 60;
 import { generatePageMetadata } from "@/lib/seo/metadata";
 
 interface LocalGuidePageProps {
@@ -48,5 +52,5 @@ export default async function LocalGuidePage({ params }: LocalGuidePageProps) {
     notFound();
   }
 
-  return <GuideDetailView guide={guide} />;
+  return <GuideDetailView guide={guide} projects={await getProjects()} />;
 }

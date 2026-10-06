@@ -167,9 +167,10 @@ export function mapProjectRowToItem(row: ProjectRow): ProjectItem {
   };
 }
 
-// Global in-memory cache pre-seeded so responses are ALWAYS instant (0ms TTFB)
-let memoryProjectsCache: ProjectItem[] = projectsData;
-let memoryTestimonialsCache: Testimonial[] = initialTestimonials;
+// Short-lived browser-side cache. Bundled sample data is only ever used when
+// Supabase is not configured, so rows deleted in the admin panel never reappear.
+let memoryProjectsCache: ProjectItem[] = [];
+let memoryTestimonialsCache: Testimonial[] = [];
 let memoryBlogsCache: BlogRow[] = [];
 let lastProjectsFetchTime = 0;
 let lastTestimonialsFetchTime = 0;
@@ -181,17 +182,46 @@ export function invalidateDataCache() {
   lastBlogsFetchTime = 0;
 }
 
+const CLIENT_CACHE_MS = 5000;
+
+// Supabase reports no error when row-level security silently blocks a write,
+// so confirm a row actually changed before telling the admin it worked.
+function assertRowChanged(rows: unknown[] | null, action: "update" | "delete") {
+  if (!rows || rows.length === 0) {
+    throw new Error(`Could not ${action} this item. Your login may have expired — sign in again and retry.`);
+  }
+}
+
+// The server always reads fresh rows: page-level caching is handled by Next.js
+// and cleared by /api/revalidate whenever the admin panel saves a change.
+function isFresh(lastFetch: number): boolean {
+  return typeof window !== "undefined" && lastFetch !== 0 && Date.now() - lastFetch < CLIENT_CACHE_MS;
+}
+
+/**
+ * Admin panel: after a create/update/delete, tell the server to rebuild the
+ * public pages so the change is live on the next visit.
+ */
+async function refreshPublicPages(): Promise<void> {
+  if (typeof window === "undefined") return;
+  try {
+    await fetch("/api/revalidate", { method: "POST" });
+  } catch {
+    // Pages still refresh on their regular 60s revalidation
+  }
+}
+
 /**
  * Client/Server: Fetches all projects with 5s memory cache.
  * Sorts Supabase projects newest first (created_at desc).
  */
-export async function getProjects(): Promise<ProjectItem[]> {
+export async function getProjects(strict = false): Promise<ProjectItem[]> {
   if (!isSupabaseConfigured()) {
     return projectsData;
   }
 
-  const now = Date.now();
-  if (now - lastProjectsFetchTime > 5000 || lastProjectsFetchTime === 0) {
+  if (!isFresh(lastProjectsFetchTime)) {
+    let failed = false;
     try {
       const supabase = createBrowserClient();
       const { data, error } = await supabase
@@ -200,17 +230,16 @@ export async function getProjects(): Promise<ProjectItem[]> {
         .order("created_at", { ascending: false });
 
       if (!error && data !== null) {
-        const mapped = (data as ProjectRow[]).map(mapProjectRowToItem);
-        // Supabase projects always come first in descending order of created_at
-        const existingSlugs = new Set(mapped.map((p) => p.slug));
-        const existingIds = new Set(mapped.map((p) => p.id));
-        const fallbacks = projectsData.filter((p) => !existingSlugs.has(p.slug) && !existingIds.has(p.id));
-        memoryProjectsCache = [...mapped, ...fallbacks];
+        memoryProjectsCache = (data as ProjectRow[]).map(mapProjectRowToItem);
         lastProjectsFetchTime = Date.now();
+      } else {
+        failed = true;
       }
     } catch {
-      // Keep existing cache
+      failed = true;
     }
+    // Callers refreshing what's already on screen want to know, so they keep it
+    if (failed && strict) throw new Error("Could not reach Supabase");
   }
 
   return memoryProjectsCache;
@@ -221,23 +250,20 @@ export async function getProjects(): Promise<ProjectItem[]> {
  */
 export async function getProjectBySlug(slug: string): Promise<ProjectItem | null> {
   const allProjects = await getProjects();
-  const found = allProjects.find((p) => p.slug === slug);
-  if (found) return found;
-
-  return projectsData.find((p) => p.slug === slug) || null;
+  return allProjects.find((p) => p.slug === slug) || null;
 }
 
 /**
  * Client/Server: Fetches all testimonials with 5s memory cache.
  * Sorts Supabase testimonials newest first (created_at desc).
  */
-export async function getTestimonials(): Promise<Testimonial[]> {
+export async function getTestimonials(strict = false): Promise<Testimonial[]> {
   if (!isSupabaseConfigured()) {
     return initialTestimonials;
   }
 
-  const now = Date.now();
-  if (now - lastTestimonialsFetchTime > 5000 || lastTestimonialsFetchTime === 0) {
+  if (!isFresh(lastTestimonialsFetchTime)) {
+    let failed = false;
     try {
       const supabase = createBrowserClient();
       const { data, error } = await supabase
@@ -246,7 +272,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         .order("created_at", { ascending: false });
 
       if (!error && data !== null) {
-        const mapped = (data as TestimonialRow[]).map((item) => ({
+        memoryTestimonialsCache = (data as TestimonialRow[]).map((item) => ({
           id: item.id,
           client_name: item.client_name,
           location: item.location,
@@ -255,15 +281,15 @@ export async function getTestimonials(): Promise<Testimonial[]> {
           created_at: item.created_at,
           updated_at: item.updated_at,
         }));
-        // Supabase testimonials always come first in descending order of created_at
-        const existingIds = new Set(mapped.map((t) => t.id));
-        const fallbacks = initialTestimonials.filter((t) => !existingIds.has(t.id));
-        memoryTestimonialsCache = [...mapped, ...fallbacks];
         lastTestimonialsFetchTime = Date.now();
+      } else {
+        failed = true;
       }
     } catch {
-      // Keep existing cache
+      failed = true;
     }
+    // Callers refreshing what's already on screen want to know, so they keep it
+    if (failed && strict) throw new Error("Could not reach Supabase");
   }
 
   return memoryTestimonialsCache;
@@ -339,6 +365,7 @@ export async function createProjectRecord(projectData: {
   const createdItem = mapProjectRowToItem(createdRow);
   memoryProjectsCache = [createdItem, ...memoryProjectsCache.filter((p) => p.id !== createdRow.id)];
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-projects-updated"));
   }
@@ -363,7 +390,7 @@ export async function updateProjectRecord(
 ): Promise<void> {
   const supabase = createBrowserClient();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("projects")
     .update({
       title: projectData.title,
@@ -375,13 +402,16 @@ export async function updateProjectRecord(
       youtube_url: projectData.youtube_url || null,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", projectId);
+    .eq("id", projectId)
+    .select("id");
 
   if (error) {
     throw new Error(`Failed to update project: ${error.message}`);
   }
+  assertRowChanged(data, "update");
 
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-projects-updated"));
   }
@@ -392,17 +422,20 @@ export async function updateProjectRecord(
  */
 export async function deleteProjectRecord(projectId: string): Promise<void> {
   const supabase = createBrowserClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("projects")
     .delete()
-    .eq("id", projectId);
+    .eq("id", projectId)
+    .select("id");
 
   if (error) {
     throw new Error(`Failed to delete project: ${error.message}`);
   }
+  assertRowChanged(data, "delete");
 
   memoryProjectsCache = memoryProjectsCache.filter((p) => p.id !== projectId);
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-projects-updated"));
   }
@@ -450,6 +483,7 @@ export async function createTestimonialRecord(testimonialData: {
     ...memoryTestimonialsCache.filter((t) => t.id !== createdRow.id),
   ];
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-testimonials-updated"));
   }
@@ -471,7 +505,7 @@ export async function updateTestimonialRecord(
 ): Promise<void> {
   const supabase = createBrowserClient();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("testimonials")
     .update({
       client_name: testimonialData.client_name,
@@ -480,13 +514,16 @@ export async function updateTestimonialRecord(
       youtube_url: testimonialData.youtube_url || null,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", id);
+    .eq("id", id)
+    .select("id");
 
   if (error) {
     throw new Error(`Failed to update testimonial: ${error.message}`);
   }
+  assertRowChanged(data, "update");
 
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-testimonials-updated"));
   }
@@ -497,17 +534,20 @@ export async function updateTestimonialRecord(
  */
 export async function deleteTestimonialRecord(id: string): Promise<void> {
   const supabase = createBrowserClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("testimonials")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .select("id");
 
   if (error) {
     throw new Error(`Failed to delete testimonial: ${error.message}`);
   }
+  assertRowChanged(data, "delete");
 
   memoryTestimonialsCache = memoryTestimonialsCache.filter((t) => t.id !== id);
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-testimonials-updated"));
   }
@@ -517,13 +557,13 @@ export async function deleteTestimonialRecord(id: string): Promise<void> {
  * Client/Server: Fetches all blogs with zero-latency (0ms) stale-while-revalidate memory cache.
  * Returns immediately from in-memory cache and triggers background revalidation if stale.
  */
-export async function getBlogs(includeUnpublished = false): Promise<BlogRow[]> {
+export async function getBlogs(includeUnpublished = false, strict = false): Promise<BlogRow[]> {
   if (!isSupabaseConfigured()) {
     return [];
   }
 
-  const now = Date.now();
-  if (now - lastBlogsFetchTime > 5000 || lastBlogsFetchTime === 0) {
+  if (!isFresh(lastBlogsFetchTime)) {
+    let failed = false;
     try {
       const supabase = createBrowserClient();
       const { data, error } = await supabase
@@ -539,10 +579,14 @@ export async function getBlogs(includeUnpublished = false): Promise<BlogRow[]> {
             .replace(/\/Main Hero\.webp$/i, "/main-hero.webp"),
         }));
         lastBlogsFetchTime = Date.now();
+      } else {
+        failed = true;
       }
     } catch {
-      // Keep existing cache
+      failed = true;
     }
+    // Callers refreshing what's already on screen want to know, so they keep it
+    if (failed && strict) throw new Error("Could not reach Supabase");
   }
 
   const list = memoryBlogsCache;
@@ -647,6 +691,7 @@ export async function createBlogRecord(blogData: {
   const createdRow = data as BlogRow;
   memoryBlogsCache = [createdRow, ...memoryBlogsCache.filter((b) => b.id !== createdRow.id)];
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-blogs-updated"));
   }
@@ -679,16 +724,19 @@ export async function updateBlogRecord(
   if (blogData.content !== undefined) payload.content = blogData.content;
   if (blogData.published !== undefined) payload.published = blogData.published;
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("blogs")
     .update(payload)
-    .eq("id", id);
+    .eq("id", id)
+    .select("id");
 
   if (error) {
     throw new Error(`Failed to update blog: ${error.message}`);
   }
+  assertRowChanged(data, "update");
 
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-blogs-updated"));
   }
@@ -702,18 +750,21 @@ export async function deleteBlogRecord(id: string): Promise<void> {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
   if (isUuid && isSupabaseConfigured()) {
     const supabase = createBrowserClient();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("blogs")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .select("id");
 
     if (error) {
       throw new Error(`Failed to delete blog: ${error.message}`);
     }
+    assertRowChanged(data, "delete");
   }
 
   memoryBlogsCache = memoryBlogsCache.filter((b) => b.id !== id);
   invalidateDataCache();
+  await refreshPublicPages();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("dmn-blogs-updated"));
   }
