@@ -7,6 +7,7 @@
 -- After: the public can still READ everything; only a logged-in admin can WRITE.
 -- ============================================================================
 
+-- 1. Projects policies
 drop policy if exists "Admin insert projects" on public.projects;
 create policy "Admin insert projects"
   on public.projects for insert
@@ -25,6 +26,7 @@ create policy "Admin delete projects"
   to authenticated
   using (true);
 
+-- 2. Testimonials policies
 drop policy if exists "Admin insert testimonials" on public.testimonials;
 create policy "Admin insert testimonials"
   on public.testimonials for insert
@@ -43,24 +45,7 @@ create policy "Admin delete testimonials"
   to authenticated
   using (true);
 
-drop policy if exists "Admin upload project images" on storage.objects;
-create policy "Admin upload project images"
-  on storage.objects for insert
-  to authenticated
-  with check (bucket_id = 'project-images');
-
-drop policy if exists "Admin update project images" on storage.objects;
-create policy "Admin update project images"
-  on storage.objects for update
-  to authenticated
-  using (bucket_id = 'project-images');
-
-drop policy if exists "Admin delete project images" on storage.objects;
-create policy "Admin delete project images"
-  on storage.objects for delete
-  to authenticated
-  using (bucket_id = 'project-images');
-
+-- 3. Blogs policies
 drop policy if exists "Admin insert blogs" on public.blogs;
 create policy "Admin insert blogs"
   on public.blogs for insert
@@ -78,6 +63,25 @@ create policy "Admin delete blogs"
   on public.blogs for delete
   to authenticated
   using (true);
+
+-- 4. Storage policies (grouped together to avoid interleaved locking)
+drop policy if exists "Admin upload project images" on storage.objects;
+create policy "Admin upload project images"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'project-images');
+
+drop policy if exists "Admin update project images" on storage.objects;
+create policy "Admin update project images"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'project-images');
+
+drop policy if exists "Admin delete project images" on storage.objects;
+create policy "Admin delete project images"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'project-images');
 
 drop policy if exists "Admin upload blog covers" on storage.objects;
 create policy "Admin upload blog covers"
