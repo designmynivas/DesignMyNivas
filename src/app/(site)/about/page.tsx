@@ -4,13 +4,17 @@ import { generatePageMetadata } from "@/lib/seo/metadata";
 import JsonLd from "@/components/seo/json-ld";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 import { getStandardBreadcrumbs } from "@/lib/seo/breadcrumbs";
+import { getTestimonials } from "@/lib/supabase/queries";
+import { aboutFaqs } from "@/data/about";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://designmynivas.com";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = generatePageMetadata({
   title: "About Us | Benson Cheripelli | Design My Nivas",
   description:
-    "Design My Nivas, founded by Benson Cheripelli: 5+ years and 70+ homes completed in Hyderabad, Warangal and Karimnagar. Itemized pricing, turnkey execution.",
+    "Meet founder Benson Cheripelli, watch client stories and contact Design My Nivas — 70+ homes in Hyderabad, Warangal and Karimnagar. Itemized pricing.",
   path: "/about",
   keywords: [
     "Benson Cheripelli",
@@ -21,7 +25,8 @@ export const metadata: Metadata = generatePageMetadata({
   ],
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const testimonials = await getTestimonials();
   const breadcrumbs = getStandardBreadcrumbs("About", "/about");
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
 
@@ -47,10 +52,20 @@ export default function AboutPage() {
     },
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": aboutFaqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.answer },
+    })),
+  };
+
   return (
     <>
-      <JsonLd data={[aboutSchema, breadcrumbSchema]} />
-      <AboutClient />
+      <JsonLd data={[aboutSchema, breadcrumbSchema, faqSchema]} />
+      <AboutClient testimonials={testimonials} />
     </>
   );
 }

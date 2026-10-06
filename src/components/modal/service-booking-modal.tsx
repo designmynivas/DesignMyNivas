@@ -127,7 +127,7 @@ function ServiceBookingModalContent({
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path
-              d="M1 1L13 13M1 13L1"
+              d="M1 1L13 13M1 13L13 1"
               stroke="currentColor"
               strokeWidth="1.75"
               strokeLinecap="round"

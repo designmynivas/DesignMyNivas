@@ -10,6 +10,8 @@ interface YouTubePlayerModalProps {
   videoUrl?: string | null;
   videoId?: string | null;
   title?: string;
+  /** Portrait 9:16 frame for YouTube Shorts */
+  vertical?: boolean;
 }
 
 export default function YouTubePlayerModal({
@@ -18,6 +20,7 @@ export default function YouTubePlayerModal({
   videoUrl,
   videoId,
   title = "Video Player",
+  vertical = false,
 }: YouTubePlayerModalProps) {
   const resolvedId = videoId || (videoUrl ? extractYouTubeId(videoUrl) : null);
 
@@ -58,7 +61,7 @@ export default function YouTubePlayerModal({
       onClick={onClose}
     >
       <div
-        className="yt-modal-container"
+        className={`yt-modal-container ${vertical ? "is-vertical" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="yt-modal-header">
@@ -110,6 +113,14 @@ export default function YouTubePlayerModal({
           display: flex;
           flex-direction: column;
           animation: ytScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .yt-modal-container.is-vertical {
+          max-width: min(420px, calc((100dvh - 7rem) * 9 / 16));
+        }
+
+        .is-vertical .yt-player-frame {
+          aspect-ratio: 9 / 16;
         }
 
         .yt-modal-header {

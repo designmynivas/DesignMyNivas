@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { getWhatsAppUrl } from "@/lib/config/site";
-import { useBookingModal } from "@/context/booking-modal-context";
+import { Phone } from "lucide-react";
+import { getWhatsAppUrl, siteConfig } from "@/lib/config/site";
 
+/** Floating WhatsApp + Call actions, bottom-right on every public page. */
 export default function WhatsAppActions() {
-  const [showStickyBar, setShowStickyBar] = useState(false);
-  const { openBookingModal } = useBookingModal();
-
   const pathname = usePathname();
 
   // Mention the city only when the visitor is on that city's page or guide
@@ -20,155 +17,115 @@ export default function WhatsAppActions() {
       ? `Hello Design My Nivas, I would like to discuss my home interior project in ${city}.`
       : "Hello Design My Nivas, I would like to enquire about residential interior design for my home."
   );
-
-  /* Show mobile sticky bar only after scrolling past the hero section (~100vh) */
-  useEffect(() => {
-    const handleScroll = () => {
-      const heroHeight = window.innerHeight;
-      setShowStickyBar(window.scrollY > heroHeight * 0.8);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleBookConsultation = () => {
-    openBookingModal({ source: "mobile-sticky-bar" });
-  };
+  const telHref = `tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`;
 
   return (
-    <>
-      {/* Mobile Sticky Bottom Action Bar — Hidden in hero, visible after scroll */}
-      <div
-        className={`mobile-sticky-actions ${showStickyBar ? "is-visible" : ""}`}
-        role="region"
-        aria-label="Mobile quick actions"
-      >
-        {/* 1st: Book Consultation (Primary Blue) */}
-        <button
-          type="button"
-          onClick={handleBookConsultation}
-          className="mobile-action-btn mobile-consult-btn"
-        >
-          <span>Book Consultation</span>
-        </button>
+    <div className="float-actions" role="complementary" aria-label="Quick contact">
+      <a href={telHref} className="float-btn float-call" aria-label={`Call ${siteConfig.phone}`}>
+        <Phone size={20} aria-hidden="true" />
+      </a>
 
-        {/* 2nd: WhatsApp (Stroke) */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mobile-action-btn mobile-whatsapp-btn"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.077-1.127-.061-.26-.084-.589-.196-1.011-.38-1.782-.777-2.936-2.597-3.025-2.716-.088-.119-.724-.964-.724-1.839 0-.875.459-1.306.623-1.485.163-.178.358-.223.477-.223.12 0 .239.001.343.006.11.006.257-.042.403.308.15.358.508 1.242.553 1.332.045.09.075.195.015.314-.06.12-.09.195-.179.3-.09.105-.188.234-.269.315-.09.09-.184.187-.079.367.105.18.468.773 1.004 1.25.69.614 1.272.805 1.452.895.18.09.285.075.39-.045.105-.12.45-.525.57-.705.12-.18.24-.15.405-.09.165.06 1.05.495 1.23.585.18.09.3.135.345.21.045.075.045.435-.099.84z" />
-          </svg>
-          <span>WhatsApp Us</span>
-        </a>
-      </div>
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="float-btn float-wa"
+        aria-label="Chat on WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+        <span className="float-wa-label">WhatsApp</span>
+      </a>
 
       <style jsx>{`
-        /* Mobile Sticky Actions — hidden by default, slides up after scroll */
-        .mobile-sticky-actions {
-          display: none;
+        .float-actions {
+          position: fixed;
+          right: max(1.25rem, env(safe-area-inset-right));
+          bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+          z-index: 95;
+          display: flex;
+          align-items: center;
+          gap: 0.625rem;
+          animation: floatIn 0.5s var(--ease-out) 0.6s both;
         }
 
-        @media (max-width: 768px) {
+        .float-btn {
+          height: 52px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          text-decoration: none;
+          transition: transform 0.2s var(--ease-out), box-shadow 0.2s;
+        }
 
-          .mobile-sticky-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 95;
-            padding: 0.625rem 0.75rem calc(0.625rem + env(safe-area-inset-bottom));
-            background-color: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(24, 24, 24, 0.08);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-            transform: translateY(120%);
+        .float-btn:hover {
+          transform: translateY(-2px);
+        }
+
+        .float-call {
+          width: 52px;
+          background: #ffffff;
+          color: var(--brand-blue);
+          border: 1px solid var(--border);
+          box-shadow: 0 8px 24px rgba(24, 24, 24, 0.14);
+        }
+
+        .float-wa {
+          gap: 0.5rem;
+          padding: 0 1.25rem 0 1rem;
+          background: #25d366;
+          color: #ffffff;
+          font-family: var(--font-body);
+          font-size: 0.9375rem;
+          font-weight: 650;
+          box-shadow: 0 10px 28px -4px rgba(37, 211, 102, 0.5);
+        }
+
+        .float-wa:hover {
+          box-shadow: 0 14px 32px -4px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes floatIn {
+          from {
             opacity: 0;
-            visibility: hidden;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                        opacity 0.25s ease,
-                        visibility 0.3s;
-            pointer-events: none;
+            transform: translateY(12px);
           }
-
-          .mobile-sticky-actions.is-visible {
-            transform: translateY(0);
+          to {
             opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
+            transform: none;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .float-actions {
+            right: max(0.875rem, env(safe-area-inset-right));
+            bottom: max(0.875rem, calc(env(safe-area-inset-bottom) + 0.5rem));
+            flex-direction: column;
+            gap: 0.5rem;
           }
 
-          .mobile-action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            height: 44px;
-            border-radius: 12px;
-            font-family: var(--font-body);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            text-decoration: none;
-            line-height: 1;
-            text-align: center;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            border: none;
-            cursor: pointer;
+          .float-btn {
+            width: 50px;
+            height: 50px;
           }
 
-          /* 1st: Book Consultation — Primary Blue */
-          .mobile-consult-btn {
-            background: linear-gradient(180deg, #3BB6EA 0%, #1793C9 100%) !important;
-            color: #FFFFFF !important;
-            border: 1px solid #29ABE2 !important;
-            border-radius: 12px !important;
-            box-shadow: 0 4px 14px -2px rgba(41, 171, 226, 0.4) !important;
-            font-weight: 650;
+          .float-wa {
+            padding: 0;
           }
 
-          .mobile-consult-btn:hover {
-            background: linear-gradient(180deg, #48BEF0 0%, #1388BC 100%) !important;
-            border-color: #1FA0D6 !important;
-            box-shadow: 0 8px 22px -4px rgba(41, 171, 226, 0.55) !important;
+          .float-wa-label {
+            display: none;
           }
+        }
 
-          /* 2nd: WhatsApp — Stroke */
-          .mobile-whatsapp-btn {
-            background-color: #FFFFFF;
-            color: var(--foreground);
-            border: 1.5px solid #D8D5CF;
-            border-radius: 12px;
-          }
-
-          .mobile-whatsapp-btn:hover {
-            border-color: #25D366;
-            color: #25D366;
-            background-color: rgba(37, 211, 102, 0.04);
-            box-shadow: 0 4px 14px -2px rgba(37, 211, 102, 0.2);
-          }
-
-          .mobile-whatsapp-btn svg {
-            color: #25D366;
-            flex-shrink: 0;
+        @media (prefers-reduced-motion: reduce) {
+          .float-actions {
+            animation: none;
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }

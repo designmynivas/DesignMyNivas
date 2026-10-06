@@ -1,32 +1,70 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import SectionHeading from "@/components/ui/section-heading";
-import TestimonialCard from "@/components/testimonials/testimonial-card";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Play } from "lucide-react";
 import { Testimonial } from "@/types/testimonial";
 import { initialTestimonials } from "@/data/testimonials";
+import Slider from "@/components/ui/slider";
+import BookButton from "@/components/ui/book-button";
+import YouTubePlayerModal from "@/components/ui/youtube-player-modal";
+import { extractYouTubeId, getYouTubeThumbnail } from "@/lib/youtube";
+import styles from "./home.module.css";
+
+const LIMIT = 12;
+const videosOnly = (list: Testimonial[]) => list.filter((t) => Boolean(t.youtube_url));
 
 interface TestimonialsProps {
   initialTestimonials?: Testimonial[];
 }
 
+function VideoCard({ item, onPlay }: { item: Testimonial; onPlay: (t: Testimonial) => void }) {
+  const ytId = extractYouTubeId(item.youtube_url);
+  const [src, setSrc] = useState(ytId ? getYouTubeThumbnail(ytId, "maxres") : "/Images/main-hero.webp");
+
+  return (
+    <article className={styles.vidCard}>
+      <button
+        type="button"
+        className={`${styles.vidThumb} zoom-host`}
+        onClick={() => onPlay(item)}
+        aria-label={`Play video story from ${item.client_name}, ${item.location}`}
+      >
+        <Image
+          src={src}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 60vw, (max-width: 1200px) 30vw, 16vw"
+          className="zoom-img"
+          style={{ objectFit: "cover" }}
+          draggable={false}
+          onError={() => {
+            if (ytId && src !== getYouTubeThumbnail(ytId, "hq")) setSrc(getYouTubeThumbnail(ytId, "hq"));
+          }}
+        />
+        <span className={styles.vidLocation}>{item.location}</span>
+        <span className={styles.vidPlay} aria-hidden="true">
+          <Play size={16} fill="currentColor" />
+        </span>
+      </button>
+      <p className={styles.vidQuote}>&ldquo;{item.quote}&rdquo;</p>
+      <p className={styles.vidName}>{item.client_name}</p>
+    </article>
+  );
+}
+
 export default function Testimonials({ initialTestimonials: propInitial }: TestimonialsProps = {}) {
   const [items, setItems] = useState<Testimonial[]>(() => {
-    if (propInitial && propInitial.length > 0) {
-      const videoReviews = propInitial.filter((t) => Boolean(t.youtube_url));
-      if (videoReviews.length > 0) return videoReviews;
-    }
-    return initialTestimonials.filter((t) => Boolean(t.youtube_url));
+    const fromProps = propInitial ? videosOnly(propInitial) : [];
+    return fromProps.length > 0 ? fromProps : videosOnly(initialTestimonials);
   });
   const [prevPropInitial, setPrevPropInitial] = useState(propInitial);
+  const [playing, setPlaying] = useState<Testimonial | null>(null);
 
   if (propInitial !== prevPropInitial) {
     setPrevPropInitial(propInitial);
-    if (propInitial && propInitial.length > 0) {
-      const videoReviews = propInitial.filter((t) => Boolean(t.youtube_url));
-      if (videoReviews.length > 0) setItems(videoReviews);
-    }
+    const fromProps = propInitial ? videosOnly(propInitial) : [];
+    if (fromProps.length > 0) setItems(fromProps);
   }
 
   useEffect(() => {
@@ -34,10 +72,8 @@ export default function Testimonials({ initialTestimonials: propInitial }: Testi
     const fetchLatest = () => {
       import("@/lib/supabase/queries").then(({ getTestimonials }) => getTestimonials()).then((res) => {
         if (isMounted && res) {
-          const videoReviews = res.filter((t) => Boolean(t.youtube_url));
-          if (videoReviews.length > 0) {
-            setItems(videoReviews);
-          }
+          const videoReviews = videosOnly(res);
+          if (videoReviews.length > 0) setItems(videoReviews);
         }
       });
     };
@@ -57,91 +93,37 @@ export default function Testimonials({ initialTestimonials: propInitial }: Testi
     };
   }, [propInitial]);
 
-  // Limit featured testimonials on home page to exactly the newest 3
-  const displayTestimonials = (items && items.length > 0 ? items : initialTestimonials).slice(0, 3);
+  if (items.length === 0) return null;
 
   return (
-    <section className="section testimonials-section" aria-label="Client Video Testimonials">
+    <section className="block" id="stories" aria-labelledby="stories-title">
       <div className="container-wide">
-        <SectionHeading
-          eyebrow="Homeowner Video Stories"
-          title="Stories from our homeowners."
-          subtitle="Watch real walkthrough reviews from families who trusted Design My Nivas with their personal living spaces across Hyderabad, Warangal, and Karimnagar."
-          align="center"
-        />
-
-        <div className="home-testimonials-grid" role="list">
-          {displayTestimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-          ))}
+        <div className="block-head reveal">
+          <h2 id="stories-title" className="block-title">
+            Client <span className="hl">Stories</span>
+          </h2>
         </div>
 
-        <div className="testimonials-action-row">
-          <Link href="/testimonials" className="btn btn-secondary view-all-testimonials-btn">
-            <span>View All Client Stories</span>
-            <span aria-hidden="true">&rarr;</span>
-          </Link>
+        <div className="reveal">
+          <Slider label="Client video stories" perView={[1.7, 3, 4, 6]} arrowTop="38%">
+            {items.slice(0, LIMIT).map((item) => (
+              <VideoCard key={item.id} item={item} onPlay={setPlaying} />
+            ))}
+          </Slider>
+        </div>
+
+        <div className="block-cta">
+          <BookButton source="home-stories" />
         </div>
       </div>
 
-      <style jsx>{`
-        .testimonials-section {
-          background-color: var(--background);
-          border: none;
-          padding: var(--space-96) 0;
-        }
-
-        .home-testimonials-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
-          margin-top: 3rem;
-        }
-
-        .testimonials-action-row {
-          display: flex;
-          justify-content: center;
-          margin-top: 2.5rem;
-        }
-
-        :global(.view-all-testimonials-btn) {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          height: 48px;
-          padding: 0 1.75rem;
-          background: #FFFFFF;
-          border: 1.5px solid #D8D5CF;
-          border-radius: 12px;
-          font-family: var(--font-body);
-          font-size: 0.9375rem;
-          font-weight: 600;
-          color: var(--foreground);
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-          text-decoration: none;
-        }
-
-        :global(.view-all-testimonials-btn:hover) {
-          border-color: #29ABE2;
-          color: #29ABE2;
-          background-color: rgba(41, 171, 226, 0.04);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px -3px rgba(41, 171, 226, 0.18);
-        }
-
-
-        @media (max-width: 1024px) {
-          .home-testimonials-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 640px) {
-          .home-testimonials-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
+      <YouTubePlayerModal
+        isOpen={Boolean(playing)}
+        onClose={() => setPlaying(null)}
+        videoUrl={playing?.youtube_url}
+        title={playing ? `${playing.client_name} · ${playing.location}` : undefined}
+        vertical={Boolean(playing?.youtube_url?.includes("/shorts/"))}
+      />
     </section>
   );
 }

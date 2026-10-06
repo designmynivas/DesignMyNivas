@@ -117,9 +117,10 @@ export const processSteps = [
 ];
 
 export const trustMetrics = [
-  { value: "5+", label: "Years in interiors" },
-  { value: "70+", label: "Projects completed" },
-  { value: "3", label: "Service locations" },
+  { value: "5+", label: "Years of practice" },
+  { value: "70+", label: "Homes completed" },
+  { value: "3", label: "Studio hubs" },
+  { value: "100%", label: "Locked estimates" },
 ];
 
 export const whyDmnPoints = [

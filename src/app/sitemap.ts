@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = getCanonicalSiteUrl();
 
   // Meaningful static content release/review timestamp (avoids artificial freshness signals)
-  const STATIC_LAST_MOD = new Date("2026-09-25T00:00:00.000Z");
+  const STATIC_LAST_MOD = new Date("2026-10-06T00:00:00.000Z");
 
   // Core static pages
   const coreRoutes = [
@@ -17,9 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/services", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/projects", priority: 0.85, changeFrequency: "weekly" as const },
     { path: "/about", priority: 0.8, changeFrequency: "monthly" as const },
-    { path: "/testimonials", priority: 0.75, changeFrequency: "weekly" as const },
     { path: "/blogs", priority: 0.8, changeFrequency: "daily" as const },
-    { path: "/contact", priority: 0.8, changeFrequency: "monthly" as const },
   ].map((route) => ({
     url: `${siteUrl}${route.path}`,
     lastModified: STATIC_LAST_MOD,

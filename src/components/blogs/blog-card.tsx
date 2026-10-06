@@ -22,7 +22,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
   });
 
   return (
-    <article className="blog-card" role="listitem">
+    <article className="blog-card">
       <Link href={`/blogs/${blog.slug}`} className="blog-card-link" aria-label={`Read article: ${blog.title}`}>
         {/* Landscape Image Frame with Inset Spacing */}
         <div className="blog-image-wrap">
@@ -31,7 +31,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
               src={blog.cover_image || "/Images/main-hero.webp"}
               alt={blog.title}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 640px) 90vw, (max-width: 1200px) 34vw, 25vw"
               priority={priority}
               className="blog-cover-image"
               style={{ objectFit: "cover" }}
@@ -71,7 +71,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
         .blog-card {
           background-color: #ffffff;
           border: 1px solid var(--border);
-          border-radius: 20px;
+          border-radius: 16px;
           overflow: hidden;
           transition: border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
                       box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -99,7 +99,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
 
         /* Landscape Image Frame with 14px Inset Gap */
         .blog-image-wrap {
-          padding: 14px 14px 0 14px;
+          padding: 10px 10px 0 10px;
           position: relative;
           width: 100%;
         }
@@ -109,7 +109,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
           width: 100%;
           aspect-ratio: 16 / 10;
           background-color: var(--background-muted);
-          border-radius: 14px;
+          border-radius: 10px;
           overflow: hidden;
         }
 
@@ -124,24 +124,24 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
 
         .blog-tag-badge {
           position: absolute;
-          top: 12px;
-          right: 12px;
+          top: 8px;
+          right: 8px;
           background-color: rgba(24, 24, 24, 0.85);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           color: #ffffff;
           font-family: var(--font-body);
-          font-size: 0.6875rem;
+          font-size: 0.625rem;
           font-weight: 700;
-          letter-spacing: 0.1em;
-          padding: 0.25rem 0.6rem;
+          letter-spacing: 0.08em;
+          padding: 0.2rem 0.5rem;
           border-radius: 6px;
           z-index: 2;
         }
 
         /* Content Area */
         .blog-card-body {
-          padding: 1.5rem 1.5rem 1.625rem 1.5rem;
+          padding: 0.875rem 1rem 1rem;
           display: flex;
           flex-direction: column;
           flex-grow: 1;
@@ -152,7 +152,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
           flex-direction: row !important;
           align-items: center !important;
           gap: 0.45rem !important;
-          margin-bottom: 0.625rem;
+          margin-bottom: 0.4rem;
           color: var(--foreground-subtle);
           font-family: var(--font-body);
           font-size: 0.75rem;
@@ -181,12 +181,13 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
 
         .blog-card-title {
           font-family: var(--font-display);
-          font-size: clamp(1.2rem, 1.6vw, 1.375rem);
+          font-size: 1rem;
           font-weight: 650;
           color: var(--foreground);
           line-height: 1.35;
-          letter-spacing: -0.015em;
-          margin-bottom: 0.75rem;
+          letter-spacing: -0.01em;
+          margin-bottom: 0.4rem;
+          overflow-wrap: anywhere;
           transition: color 0.18s ease;
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -200,11 +201,12 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
 
         .blog-card-preview {
           font-family: var(--font-body);
-          font-size: 0.875rem;
-          line-height: 1.6;
+          font-size: 0.8125rem;
+          line-height: 1.5;
           color: var(--foreground-muted);
-          margin-bottom: 1.25rem;
+          margin-bottom: 0.75rem;
           flex-grow: 1;
+          overflow-wrap: anywhere;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
@@ -222,7 +224,7 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
           font-size: 0.8125rem;
           font-weight: 700;
           letter-spacing: 0.02em;
-          padding-top: 0.75rem;
+          padding-top: 0.625rem;
           border-top: 1px solid var(--border-subtle);
           white-space: nowrap !important;
         }
@@ -243,19 +245,6 @@ export default function BlogCard({ blog, priority = false }: BlogCardProps) {
           transform: translateX(4px);
         }
 
-        @media (max-width: 540px) {
-          .blog-image-wrap {
-            padding: 10px 10px 0 10px;
-          }
-
-          .blog-card-body {
-            padding: 1.125rem 1.125rem 1.25rem 1.125rem;
-          }
-
-          .blog-card-title {
-            font-size: 1.125rem;
-          }
-        }
       `}</style>
     </article>
   );

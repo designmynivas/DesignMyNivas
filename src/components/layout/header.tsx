@@ -11,9 +11,7 @@ const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
   { label: "About", href: "/about" },
-  { label: "Testimonials", href: "/testimonials" },
   { label: "Blogs", href: "/blogs" },
-  { label: "Contact", href: "/contact" },
 ];
 
 export default function SiteHeader() {
@@ -176,7 +174,7 @@ export default function SiteHeader() {
             className="btn mobile-panel-wa-btn"
             onClick={closeMenu}
           >
-            <span>Direct Inquiry</span>
+            <span>WhatsApp Us</span>
           </a>
         </div>
       </div>
@@ -268,7 +266,7 @@ export default function SiteHeader() {
         .desktop-nav {
           display: flex;
           align-items: center;
-          gap: 1.625rem;
+          gap: 2.25rem;
         }
 
         .nav-item {
@@ -379,16 +377,7 @@ export default function SiteHeader() {
           display: none;
         }
 
-        @media (max-width: 1200px) {
-          .desktop-nav {
-            gap: 1rem;
-          }
-          .nav-item {
-            font-size: 0.8125rem;
-          }
-        }
-
-        @media (max-width: 1040px) {
+        @media (max-width: 900px) {
           .site-header {
             top: 12px;
             left: 12px;

@@ -154,7 +154,7 @@ export default function GuidesHubPage() {
               floor plans, material samples, and fixed-price timelines across Hyderabad, Warangal, and Karimnagar.
             </p>
             <div className={styles.ctaActions}>
-              <Link href="/contact" className="btn btn-primary">
+              <Link href="/about#contact" className="btn btn-primary">
                 <span>Book a Design Consultation</span>
                 <span aria-hidden="true">&rarr;</span>
               </Link>

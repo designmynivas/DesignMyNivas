@@ -38,7 +38,7 @@ export default function ServicesClient() {
               </p>
             </div>
             <div className="banner-action">
-              <Link href="/contact" className="btn btn-primary banner-btn">
+              <Link href="/about#contact" className="btn btn-primary banner-btn">
                 <span>Book a Consultation</span>
                 <span aria-hidden="true">&rarr;</span>
               </Link>

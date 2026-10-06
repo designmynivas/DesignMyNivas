@@ -99,6 +99,13 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Testimonials and Contact were merged into the About page
+  async redirects() {
+    return [
+      { source: "/testimonials", destination: "/about#testimonials", permanent: true },
+      { source: "/contact", destination: "/about#contact", permanent: true },
+    ];
+  },
   async rewrites() {
     return [
       {

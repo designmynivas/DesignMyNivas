@@ -24,12 +24,11 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
       <section className="blogs-header-section">
         <div className="container-wide">
           <div className="blogs-header-content">
-            <span className="eyebrow">Design Journal & Articles</span>
             <h1 className="blogs-main-title">
-              Architectural insights for modern living.
+              Interior Design <span className="hl">Blogs</span>
             </h1>
             <p className="blogs-main-subtitle">
-              Expert guides on calibrated finishes, modular joinery, and turnkey residential execution for homeowners across Hyderabad, Warangal, and Karimnagar.
+              Practical ideas and guides for planning your home.
             </p>
           </div>
         </div>
@@ -39,7 +38,7 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
       <section className="blogs-grid-section" aria-label="Interior Design Articles">
         <div className="container-wide">
           {blogs.length > 0 ? (
-            <div className="blogs-grid" role="list">
+            <div className="blogs-grid">
               {blogs.map((blog, idx) => (
                 <BlogCard key={blog.id} blog={blog} priority={idx < 2} />
               ))}
@@ -66,7 +65,7 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
         }
 
         .blogs-header-section {
-          padding: 7.5rem 0 3.5rem 0;
+          padding: 8rem 0 2.5rem 0;
           border-bottom: 1px solid var(--border-subtle);
           background: linear-gradient(180deg, rgba(247, 245, 240, 0.4) 0%, rgba(239, 237, 231, 0.6) 100%);
         }
@@ -77,25 +76,18 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
           text-align: center;
         }
 
-        .eyebrow {
-          font-family: var(--font-body);
-          font-size: 0.75rem;
-          font-weight: 700;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: #29ABE2;
-          display: block;
-          margin-bottom: 1rem;
+        .hl {
+          color: var(--brand-blue);
         }
 
         .blogs-main-title {
           font-family: var(--font-display);
           font-size: clamp(2.25rem, 4.2vw, 3.5rem);
-          font-weight: 650;
-          line-height: 1.18;
-          letter-spacing: -0.025em;
+          font-weight: 680;
+          line-height: 1.1;
+          letter-spacing: -0.03em;
           color: var(--foreground);
-          margin-bottom: 1.25rem;
+          margin-bottom: 0.75rem;
         }
 
         .blogs-main-subtitle {
@@ -113,8 +105,14 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
 
         .blogs-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 2rem;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.25rem;
+        }
+
+        @media (max-width: 1200px) {
+          .blogs-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
         }
 
         /* Empty State */
@@ -157,10 +155,8 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
 
         @media (max-width: 900px) {
           .blogs-grid {
-            grid-template-columns: 1fr;
-            max-width: 640px;
-            margin: 0 auto;
-            gap: 1.75rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
           }
 
           .blogs-header-section {
@@ -175,6 +171,10 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
 
           .blogs-grid-section {
             padding: 2rem 0;
+          }
+
+          .blogs-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

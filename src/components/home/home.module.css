@@ -1,0 +1,358 @@
+/* ── Service cards (16:9) ── */
+.svcCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--foreground);
+  transition: border-color 0.2s, box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+
+.svcCard:hover {
+  border-color: var(--brand-blue-border);
+  box-shadow: 0 14px 34px -10px rgba(24, 24, 24, 0.14);
+  transform: translateY(-3px);
+}
+
+.svcMedia {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--background-muted);
+}
+
+.svcBody {
+  padding: 1rem 1.125rem 1.125rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.svcName {
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.svcDesc {
+  margin-top: 0.35rem;
+  margin-bottom: auto;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--foreground-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.svcName a {
+  color: inherit;
+  transition: color 0.15s;
+}
+
+.svcName a:hover {
+  color: var(--brand-blue);
+}
+
+/* Full-width primary action pinned to the card bottom */
+.svcBody .svcCta {
+  margin-top: auto;
+  width: 100%;
+  height: 46px;
+  font-size: 0.875rem;
+}
+
+.svcBody .svcDesc + .svcCta {
+  margin-top: 1rem;
+}
+
+/* ── Project tiles (portrait, text over image) ── */
+.projCard {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--background-muted);
+  isolation: isolate;
+}
+
+.projShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(12, 14, 18, 0.78) 100%);
+  pointer-events: none;
+}
+
+.projInfo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.25rem 1.375rem 1.375rem;
+  color: #FFFFFF;
+}
+
+.projMeta {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.projTitle {
+  margin-top: 0.35rem;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #FFFFFF;
+  text-transform: capitalize;
+}
+
+/* Stretched link: the whole tile opens the project, the play button sits above it */
+.projLink {
+  color: inherit;
+}
+
+.projLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.projPlay {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 1rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--brand-blue);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 3px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(41, 171, 226, 0.55);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.projPlay:hover {
+  transform: scale(1.08);
+}
+
+/* ── Video story cards (9:16) ── */
+.vidCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.vidThumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #121418;
+  cursor: pointer;
+}
+
+.vidThumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 30%, transparent 65%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+}
+
+.vidLocation {
+  position: absolute;
+  z-index: 1;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+
+.vidPlay {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 3px;
+  box-shadow: 0 6px 22px rgba(41, 171, 226, 0.55);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.vidThumb:hover .vidPlay {
+  transform: scale(1.1);
+}
+
+.vidQuote {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vidName {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  color: var(--foreground-muted);
+  text-transform: capitalize;
+}
+
+/* ── Why + founder ── */
+.whyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.founderCard {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  max-height: 600px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--background-muted);
+}
+
+.founderCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 4rem 1.5rem 1.5rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(12, 14, 18, 0.82) 55%);
+  color: #FFFFFF;
+}
+
+.founderQuote {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-weight: 550;
+  line-height: 1.4;
+  color: #FFFFFF;
+}
+
+.founderName {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.whyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.whyListWide {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.whyItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.whyIcon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--brand-blue-subtle);
+  color: var(--brand-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whyTitle {
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.whyText {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 1100px) {
+  .whyListWide {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .whyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .founderCard {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 560px) {
+  .whyList,
+  .whyListWide {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+
+  .whyItem {
+    flex-direction: row;
+    padding: 0.875rem 1rem;
+  }
+}

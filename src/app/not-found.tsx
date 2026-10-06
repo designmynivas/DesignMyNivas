@@ -54,7 +54,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/contact"
+            href="/about#contact"
             className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-white border border-[#E5E5E5] text-[#181818] hover:border-[#29ABE2] hover:text-[#29ABE2] transition-colors shadow-xs group"
           >
             <Phone size={20} className="text-[#29ABE2] group-hover:scale-110 transition-transform" />

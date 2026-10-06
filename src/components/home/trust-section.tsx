@@ -1,145 +1,142 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trustMetrics } from "@/lib/config/site";
 
-function useCountUp(target: number, duration = 1800, startCounting = false) {
+function useCountUp(target: number, start: boolean, duration = 1100) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!startCounting) return;
+    if (!start) return;
+    const total = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : duration;
 
     let startTime: number | null = null;
     let raf: number;
-
     const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      // easeOutExpo for dramatic luxury deceleration
-      const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      if (startTime === null) startTime = timestamp;
+      const progress = total === 0 ? 1 : Math.min((timestamp - startTime) / total, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(eased * target));
-
-      if (progress < 1) {
-        raf = requestAnimationFrame(animate);
-      }
+      if (progress < 1) raf = requestAnimationFrame(animate);
     };
-
     raf = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(raf);
-  }, [target, duration, startCounting]);
+  }, [target, start, duration]);
 
   return count;
 }
 
-function TrustItem({
-  target,
-  suffix,
-  label,
-  startCounting,
-}: {
-  target: number;
-  suffix: string;
-  label: string;
-  startCounting: boolean;
-}) {
-  const animatedCount = useCountUp(target, 1800, startCounting);
+function Metric({ value, label, start }: { value: string; label: string; start: boolean }) {
+  const target = parseInt(value, 10) || 0;
+  const suffix = value.replace(/^\d+/, "");
+  const count = useCountUp(target, start);
 
   return (
-    <div className="flex flex-col items-center justify-center text-center">
-      <div className="flex items-baseline justify-center tracking-tight">
-        <span className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#181818] leading-none">
-          {startCounting ? animatedCount : 0}
-        </span>
-        {suffix && (
-          <span className="font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#29ABE2] leading-none ml-0.5">
-            {suffix}
-          </span>
-        )}
+    <div className="metric">
+      <div className="metric-value" aria-hidden="true">
+        {count}
+        <span className="metric-suffix">{suffix}</span>
       </div>
-      <p className="font-body text-xs sm:text-sm md:text-base font-medium text-[#66625D] mt-2 sm:mt-3 leading-snug max-w-[180px]">
-        {label}
-      </p>
+      <span className="sr-only">{value}</span>
+      <p className="metric-label">{label}</p>
+
+      <style jsx>{`
+        .metric {
+          background: #ffffff;
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 1.25rem 1.5rem;
+          transition: border-color 0.2s, transform 0.2s var(--ease-out);
+        }
+
+        .metric:hover {
+          border-color: var(--brand-blue-border);
+          transform: translateY(-2px);
+        }
+
+        .metric-value {
+          font-family: var(--font-display);
+          font-size: clamp(2rem, 3.6vw, 2.875rem);
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: var(--foreground);
+          font-variant-numeric: tabular-nums;
+        }
+
+        .metric-suffix {
+          color: var(--brand-blue);
+          margin-left: 2px;
+        }
+
+        .metric-label {
+          margin-top: 0.5rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          line-height: 1.3;
+          color: var(--foreground-muted);
+        }
+
+        @media (max-width: 640px) {
+          .metric {
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+          }
+
+          .metric-label {
+            font-size: 0.8125rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
 export default function TrustSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleIntersection = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      });
-    },
-    []
-  );
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = ref.current;
     if (!el) return;
-
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.15,
-    });
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [handleIntersection]);
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="trust-section"
-      aria-label="Our Track Record"
-    >
+    <section ref={ref} className="trust-strip" aria-label="Our track record">
       <div className="container-wide">
         <div className="trust-grid">
-          {trustMetrics.map((metric) => {
-            const numericMatch = metric.value.match(/^(\d+)/);
-            const target = numericMatch ? parseInt(numericMatch[1], 10) : 0;
-            const suffix = metric.value.replace(/^\d+/, "");
-
-            return (
-              <TrustItem
-                key={metric.label}
-                target={target}
-                suffix={suffix}
-                label={metric.label}
-                startCounting={isVisible}
-              />
-            );
-          })}
+          {trustMetrics.map((m) => (
+            <Metric key={m.label} value={m.value} label={m.label} start={visible} />
+          ))}
         </div>
       </div>
 
       <style jsx>{`
-        .trust-section {
-          background-color: var(--background);
-          border: none;
-          padding: clamp(1.75rem, 3.5vw, 2.75rem) 0 clamp(0.75rem, 1.5vw, 1.25rem);
-          position: relative;
+        .trust-strip {
+          padding: clamp(1.5rem, 3vw, 2.25rem) 0 0;
         }
 
         .trust-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: clamp(1rem, 4vw, 3.5rem);
-          max-width: 1100px;
-          margin: 0 auto;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
         }
 
-        @media (max-width: 640px) {
-          .trust-section {
-            padding: 1.25rem 0 0.5rem;
-          }
-
+        @media (max-width: 768px) {
           .trust-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.625rem;
           }
         }
       `}</style>

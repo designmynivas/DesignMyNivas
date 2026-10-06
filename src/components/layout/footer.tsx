@@ -8,16 +8,14 @@ const navLinks = [
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
-  { label: "Testimonials", href: "/testimonials" },
   { label: "Blogs", href: "/blogs" },
   { label: "Guides", href: "/guides" },
-  { label: "Contact", href: "/contact" },
 ];
 
 const locations = [
-  { name: "Hyderabad", note: "Headquarters & Primary Studio", href: "/interior-designers/hyderabad" },
-  { name: "Warangal", note: "Regional Residential Projects", href: "/interior-designers/warangal" },
-  { name: "Karimnagar", note: "Turnkey Residential Execution", href: "/interior-designers/karimnagar" },
+  { name: "Hyderabad", href: "/interior-designers/hyderabad" },
+  { name: "Warangal", href: "/interior-designers/warangal" },
+  { name: "Karimnagar", href: "/interior-designers/karimnagar" },
 ];
 
 export default function SiteFooter() {
@@ -28,8 +26,8 @@ export default function SiteFooter() {
 
   const contactChannels = [
     { label: "WhatsApp", href: whatsappUrl, isExternal: true },
-    { label: `Phone: ${siteConfig.phone}`, href: `tel:${siteConfig.phone.replace(/\s+/g, "")}`, isExternal: false },
-    { label: `Email: ${siteConfig.email}`, href: `mailto:${siteConfig.email}`, isExternal: false },
+    { label: siteConfig.phone, href: `tel:${siteConfig.phone.replace(/\s+/g, "")}`, isExternal: false },
+    { label: siteConfig.email, href: `mailto:${siteConfig.email}`, isExternal: false },
     { label: "Instagram", href: "https://instagram.com/designmynivas", isExternal: true },
     { label: "Facebook", href: "https://facebook.com/designmynivas", isExternal: true },
   ];
@@ -46,11 +44,11 @@ export default function SiteFooter() {
                 <Image
                   src="/logo/dmn-logo.webp"
                   alt="Design My Nivas"
-                  width={120}
-                  height={120}
+                  width={88}
+                  height={88}
                   className="footer-logo-img"
                   style={{
-                    width: "120px",
+                    width: "88px",
                     height: "auto",
                     display: "block",
                     objectFit: "contain",
@@ -60,8 +58,7 @@ export default function SiteFooter() {
               </div>
             </Link>
             <p className="footer-description">
-              Thoughtfully designed residential interiors and turnkey execution across Hyderabad, Warangal, and Karimnagar.
-              Founded by Benson Cheripelli.
+              Residential interiors, designed and delivered across Telangana.
             </p>
           </div>
 
@@ -84,10 +81,9 @@ export default function SiteFooter() {
             <h3 className="footer-col-title">Service Areas</h3>
             <ul className="footer-links">
               {locations.map((loc) => (
-                <li key={loc.name} className="footer-location-item">
-                  <Link href={loc.href} className="footer-location-link">
-                    <span className="footer-location-city">{loc.name}</span>
-                    <span className="footer-location-note">{loc.note}</span>
+                <li key={loc.name}>
+                  <Link href={loc.href} className="footer-link">
+                    {loc.name}
                   </Link>
                 </li>
               ))}
@@ -149,15 +145,16 @@ export default function SiteFooter() {
           background-color: var(--surface);
           color: var(--foreground);
           border-top: 1px solid var(--border);
-          padding-top: var(--space-80);
-          padding-bottom: var(--space-48);
+          padding-top: var(--space-48);
+          /* Clear the floating WhatsApp / Call buttons */
+          padding-bottom: 5.5rem;
         }
 
         .footer-grid {
           display: grid;
-          grid-template-columns: 1.4fr 0.9fr 1.1fr 1.1fr;
-          gap: var(--space-48);
-          padding-bottom: var(--space-64);
+          grid-template-columns: 1.3fr 0.8fr 1.1fr 1.1fr;
+          gap: var(--space-32);
+          padding-bottom: var(--space-32);
         }
 
         .footer-brand {
@@ -172,7 +169,7 @@ export default function SiteFooter() {
         }
 
         .footer-logo-frame {
-          width: 175px;
+          width: 88px;
         }
 
         .footer-description {
@@ -189,7 +186,7 @@ export default function SiteFooter() {
           letter-spacing: 0.14em;
           text-transform: uppercase;
           color: var(--foreground);
-          margin-bottom: var(--space-24);
+          margin-bottom: var(--space-16);
         }
 
         .footer-links {
@@ -198,7 +195,7 @@ export default function SiteFooter() {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.875rem;
+          gap: 0.6rem;
         }
 
         .footer-link {
@@ -215,36 +212,6 @@ export default function SiteFooter() {
         .external-arrow {
           font-size: 0.85em;
           color: var(--brand-blue);
-        }
-
-        .footer-location-item {
-          display: flex;
-          flex-direction: column;
-          gap: 0.125rem;
-        }
-
-        .footer-location-link {
-          display: flex;
-          flex-direction: column;
-          gap: 0.125rem;
-          text-decoration: none;
-          transition: opacity 0.15s ease;
-        }
-
-        .footer-location-link:hover .footer-location-city {
-          color: var(--brand-blue);
-        }
-
-        .footer-location-city {
-          font-size: var(--text-body-sm);
-          font-weight: 500;
-          color: var(--foreground);
-          transition: color var(--duration-fast);
-        }
-
-        .footer-location-note {
-          font-size: var(--text-caption);
-          color: var(--foreground-muted);
         }
 
         .footer-bottom {
@@ -300,12 +267,12 @@ export default function SiteFooter() {
 
         @media (max-width: 640px) {
           .footer-grid {
-            grid-template-columns: 1fr;
-            gap: var(--space-32);
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-24) var(--space-16);
           }
 
-          .footer-logo-frame {
-            width: 145px;
+          .footer-brand {
+            grid-column: 1 / -1;
           }
 
           .footer-bottom-inner {

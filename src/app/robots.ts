@@ -17,9 +17,9 @@ export default function robots(): MetadataRoute.Robots {
           "/blogs",
           "/blogs/*",
           "/about",
-          "/testimonials",
-          "/contact",
           "/interior-designers/*",
+          "/guides",
+          "/guides/*",
         ],
         disallow: [
           "/admin",

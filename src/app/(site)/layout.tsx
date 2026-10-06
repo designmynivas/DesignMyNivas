@@ -4,6 +4,7 @@ import WhatsAppActions from "@/components/ui/whatsapp-actions";
 import { BookingModalProvider } from "@/context/booking-modal-context";
 import { CostEstimatorProvider } from "@/context/cost-estimator-context";
 import SiteModals from "@/components/modal/site-modals";
+import ScrollReveal from "@/components/ui/scroll-reveal";
 
 export default function SiteLayout({
   children,
@@ -18,6 +19,7 @@ export default function SiteLayout({
         <SiteFooter />
         <WhatsAppActions />
         <SiteModals />
+        <ScrollReveal />
       </CostEstimatorProvider>
     </BookingModalProvider>
   );

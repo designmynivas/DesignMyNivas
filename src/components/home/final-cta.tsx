@@ -1,273 +1,141 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { getWhatsAppUrl } from "@/lib/config/site";
 import { useBookingModal } from "@/context/booking-modal-context";
-import { MapPin, ArrowRight, MessageCircle } from "lucide-react";
 
-export default function FinalCTA() {
+export default function FinalCTA({
+  title = "Let’s build a home you’ll",
+  highlight = "love living in.",
+  source = "final-cta",
+}: {
+  title?: string;
+  highlight?: string;
+  source?: string;
+}) {
   const { openBookingModal } = useBookingModal();
   const whatsappUrl = getWhatsAppUrl(
-    "Hello Design My Nivas, I would like to enquire about residential interior design for my home."
+    "Hello Design My Nivas, I would like to discuss interiors for my home."
   );
 
   return (
-    <section className="final-cta-section" aria-label="Book a Consultation">
-      <div className="container">
-        {/* Blue and White Rectangular CTA Card */}
-        <div className="cta-rectangle-card">
-          {/* Subtle Ambient Blue Top Glow */}
-          <div className="card-ambient-glow" aria-hidden="true" />
-
-          <div className="cta-content">
-            <div className="cta-eyebrow-pill">
-              <span>Start Your Journey</span>
-            </div>
-
-            <h2 className="cta-headline">
-              Let&rsquo;s Design Your Nivas.
+    <section className="final-cta" aria-labelledby={`${source}-title`}>
+      <div className="container-wide">
+        <div className="cta-card reveal">
+          <div>
+            <h2 id={`${source}-title`} className="cta-title">
+              {title} <span className="hl">{highlight}</span>
             </h2>
-
-            <p className="cta-subtitle">
-              Your dream home starts with a conversation. Turnkey residential interior design and execution with transparent milestone pricing across Telangana.
-            </p>
-
-            <div className="cta-actions">
-              <button
-                type="button"
-                onClick={() => openBookingModal({ source: "final-cta" })}
-                className="cta-btn-primary"
-                aria-label="Book a Consultation"
-              >
-                <span>Book a Consultation</span>
-                <ArrowRight size={17} className="btn-arrow" />
-              </button>
-
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cta-btn-whatsapp"
-                aria-label="Chat on WhatsApp"
-              >
-                <MessageCircle size={18} className="wa-icon" />
-                <span>Chat on WhatsApp</span>
-              </a>
-            </div>
-
-            <div className="cta-locations-strip">
-              <div className="loc-item">
-                <MapPin size={14} className="loc-icon" aria-hidden="true" />
-                <span>Hyderabad</span>
-              </div>
-              <span className="loc-sep" aria-hidden="true">·</span>
-              <div className="loc-item">
-                <MapPin size={14} className="loc-icon" aria-hidden="true" />
-                <span>Warangal</span>
-              </div>
-              <span className="loc-sep" aria-hidden="true">·</span>
-              <div className="loc-item">
-                <MapPin size={14} className="loc-icon" aria-hidden="true" />
-                <span>Karimnagar</span>
-              </div>
-            </div>
+            <p className="cta-sub">Free consultation · Hyderabad, Warangal &amp; Karimnagar</p>
+          </div>
+          <div className="cta-actions">
+            <button
+              type="button"
+              onClick={() => openBookingModal({ source })}
+              className="cta-primary"
+            >
+              Book a Consultation <ArrowRight size={16} aria-hidden="true" />
+            </button>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="cta-secondary">
+              WhatsApp Us <ArrowRight size={16} aria-hidden="true" />
+            </a>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        .final-cta-section {
-          padding: 5rem 0 6rem 0;
-          background-color: var(--background);
-          position: relative;
+        .final-cta {
+          padding: clamp(1rem, 3vw, 2rem) 0 clamp(3.5rem, 7vw, 5.5rem);
         }
 
-        .cta-rectangle-card {
-          position: relative;
-          background: #FFFFFF;
-          border: 1.5px solid rgba(41, 171, 226, 0.28);
-          border-radius: 24px;
-          padding: 4.5rem 2.5rem;
-          box-shadow: 0 20px 60px -15px rgba(41, 171, 226, 0.12),
-                      0 4px 16px rgba(0, 0, 0, 0.03);
-          overflow: hidden;
-          text-align: center;
-        }
-
-        .card-ambient-glow {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 60%;
-          height: 120px;
-          background: radial-gradient(ellipse at top, rgba(41, 171, 226, 0.15) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .cta-content {
-          position: relative;
-          z-index: 1;
+        .cta-card {
           display: flex;
           flex-direction: column;
           align-items: center;
-          max-width: 720px;
+          text-align: center;
+          gap: 1.75rem;
+          padding: clamp(1.75rem, 4vw, 3rem);
+          border-radius: 24px;
+          background: #ffffff;
+          border: 1px solid var(--brand-blue-border);
+          box-shadow: 0 16px 48px -12px rgba(41, 171, 226, 0.18);
+        }
+
+        .cta-title {
+          font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+          font-weight: 650;
+          line-height: 1.1;
+          letter-spacing: -0.03em;
+          max-width: 26ch;
           margin: 0 auto;
         }
 
-        .cta-eyebrow-pill {
-          display: inline-flex;
-          align-items: center;
-          background: #EFF6FF;
-          border: 1px solid #DBEAFE;
-          color: #29ABE2;
-          font-family: var(--font-body);
-          font-size: 0.75rem;
-          font-weight: 750;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          padding: 0.35rem 0.9rem;
-          border-radius: 980px;
-          margin-bottom: 1.25rem;
+        .hl {
+          color: var(--brand-blue);
         }
 
-        .cta-headline {
-          color: #0F172A;
-          font-family: var(--font-display);
-          font-size: clamp(2.25rem, 4.5vw, 3.5rem);
-          font-weight: 700;
-          line-height: 1.15;
-          letter-spacing: -0.025em;
-          margin: 0 0 1rem 0;
-        }
-
-        .cta-subtitle {
-          font-family: var(--font-body);
-          font-size: clamp(1rem, 1.6vw, 1.125rem);
-          color: #475569;
-          line-height: 1.65;
-          margin: 0 0 2.25rem 0;
-          max-width: 620px;
+        .cta-sub {
+          margin-top: 0.75rem;
+          font-size: 0.9375rem;
+          color: var(--foreground-muted);
         }
 
         .cta-actions {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-          flex-wrap: wrap;
-          justify-content: center;
-          margin-bottom: 2.5rem;
+          gap: 0.75rem;
+          flex-shrink: 0;
         }
 
-        .cta-btn-primary {
+        .cta-primary,
+        .cta-secondary {
           height: 52px;
-          padding: 0 2.25rem;
-          font-family: var(--font-body);
-          font-size: 1rem;
-          font-weight: 650;
+          padding: 0 1.5rem;
           display: inline-flex;
           align-items: center;
-          gap: 0.625rem;
-          color: #FFFFFF;
-          background: linear-gradient(180deg, #3BB6EA 0%, #1793C9 100%);
-          border: 1px solid #29ABE2;
-          border-radius: 12px;
-          box-shadow: 0 10px 24px -4px rgba(41, 171, 226, 0.45);
-          cursor: pointer;
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .cta-btn-primary:hover {
-          background: linear-gradient(180deg, #48BEF0 0%, #1388BC 100%);
-          border-color: #1FA0D6;
-          transform: translateY(-2px);
-          box-shadow: 0 16px 32px -4px rgba(41, 171, 226, 0.6);
-        }
-
-        .btn-arrow {
-          transition: transform 0.22s ease;
-        }
-
-        .cta-btn-primary:hover .btn-arrow {
-          transform: translateX(3px);
-        }
-
-        .cta-btn-whatsapp {
-          height: 52px;
-          padding: 0 2rem;
-          font-family: var(--font-body);
-          font-size: 1rem;
-          font-weight: 650;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.55rem;
-          background: #FFFFFF;
-          color: #0F172A;
-          border: 1.5px solid #CBD5E1;
-          border-radius: 12px;
-          text-decoration: none;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .wa-icon {
-          color: #25D366;
-          transition: transform 0.2s ease;
-        }
-
-        .cta-btn-whatsapp:hover {
-          border-color: #25D366;
-          color: #25D366;
-          background: rgba(37, 211, 102, 0.05);
-          box-shadow: 0 8px 24px -4px rgba(37, 211, 102, 0.25);
-          transform: translateY(-2px);
-        }
-
-        .cta-btn-whatsapp:hover .wa-icon {
-          transform: scale(1.1);
-        }
-
-        .cta-locations-strip {
-          display: flex;
-          align-items: center;
           justify-content: center;
-          gap: 0.85rem;
+          gap: 0.5rem;
+          border-radius: 12px;
           font-family: var(--font-body);
-          font-size: 0.8125rem;
+          font-size: 0.9375rem;
           font-weight: 600;
-          color: #475569;
-          letter-spacing: 0.04em;
-          flex-wrap: wrap;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: transform 0.15s, box-shadow 0.2s, border-color 0.15s, color 0.15s;
         }
 
-        .loc-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
+        .cta-primary {
+          color: #ffffff;
+          background: linear-gradient(180deg, #3bb6ea 0%, #1793c9 100%);
+          border: 1px solid #29abe2;
+          box-shadow: 0 10px 26px -6px rgba(41, 171, 226, 0.55);
         }
 
-        :global(.loc-icon) {
-          color: #29ABE2;
+        .cta-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 14px 32px -6px rgba(41, 171, 226, 0.7);
         }
 
-        .loc-sep {
-          color: #CBD5E1;
+        .cta-secondary {
+          background: #ffffff;
+          border: 1.5px solid var(--border);
+          color: var(--foreground);
         }
 
-        @media (max-width: 640px) {
-          .cta-rectangle-card {
-            padding: 3rem 1.5rem;
-            border-radius: 18px;
-          }
+        .cta-secondary:hover {
+          border-color: var(--brand-blue);
+          color: var(--brand-blue);
+          transform: translateY(-2px);
+        }
 
+        @media (max-width: 520px) {
           .cta-actions {
             flex-direction: column;
             width: 100%;
           }
 
-          .cta-btn-primary,
-          .cta-btn-whatsapp {
+          .cta-primary,
+          .cta-secondary {
             width: 100%;
-            justify-content: center;
           }
         }
       `}</style>

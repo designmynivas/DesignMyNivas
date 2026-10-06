@@ -1,21 +1,17 @@
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/hero";
-import Statement from "@/components/home/statement";
+import TrustSection from "@/components/home/trust-section";
 import Services from "@/components/home/services";
 import SelectedProjects from "@/components/home/selected-projects";
-import TrustSection from "@/components/home/trust-section";
-import WhyUs from "@/components/home/why-us";
-import Founder from "@/components/home/founder";
 import Testimonials from "@/components/home/testimonials";
+import WhyUs from "@/components/home/why-us";
 import HomeBlogs from "@/components/home/home-blogs";
 import FinalCTA from "@/components/home/final-cta";
 import { getProjects, getTestimonials, getBlogs } from "@/lib/supabase/queries";
 import JsonLd from "@/components/seo/json-ld";
 import { generatePageMetadata } from "@/lib/seo/metadata";
 
-// Heavy below-fold components: dynamically imported to reduce initial JS payload
-// Process imports motion/react (~124KB), CostCalculator is 32KB of source
-const Process = dynamic(() => import("@/components/home/process"), { ssr: true });
+// Below-fold and interactive: split out of the initial bundle
 const CostCalculatorSection = dynamic(() => import("@/components/home/cost-calculator-section"), { ssr: true });
 
 export const revalidate = 60;
@@ -69,40 +65,14 @@ export default async function HomePage() {
     <>
       <JsonLd data={homeWebPageSchema} />
 
-      {/* 01 Hero */}
       <Hero />
-
-      {/* 02 Trust Metrics (5+ Years, 70+ Projects, 3 Locations) — right after hero */}
       <TrustSection />
-
-      {/* 03 Short positioning statement */}
-      <Statement />
-
-      {/* 04 SERVICES (6 large cards, 2x3, View All Services) */}
       <Services />
-
-      {/* 05 Selected Projects (newest 6 cards, 3x2, View All Projects) */}
-      <SelectedProjects initialProjects={projects.slice(0, 6)} />
-
-      {/* 06 Why Design My Nivas */}
+      <SelectedProjects initialProjects={projects.slice(0, 8)} />
+      <Testimonials initialTestimonials={testimonials} />
       <WhyUs />
-
-      {/* 07 Founder (Benson Cheripelli) */}
-      <Founder />
-
-      {/* 08 Process */}
-      <Process />
-
-      {/* 09 Testimonials (newest 3 video reviews) */}
-      <Testimonials initialTestimonials={testimonials.slice(0, 3)} />
-
-      {/* 10 Cost Estimator ("Planning your interiors?" -> Estimate Your Cost) */}
       <CostCalculatorSection />
-
-      {/* 11 Editorial Guides & Insights (newest 4 blog cards) */}
-      <HomeBlogs initialBlogs={blogs.slice(0, 4)} />
-
-      {/* 12 Final Consultation CTA */}
+      <HomeBlogs initialBlogs={blogs.slice(0, 8)} />
       <FinalCTA />
     </>
   );
